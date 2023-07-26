@@ -25,13 +25,13 @@ typedef	struct			s_ph
 
 typedef struct			s_data
 {
-	int					nb_philo;
+	int					nb_phs;
 	int					t_death;
 	int					t_eat;
 	int					t_sleep;
 	int					nb_eat;
 	int					dead;
-	int					all_ate;
+	int					everybody_has_eaten;
 	long long			first_timestamp;
 	pthread_mutex_t		meal_check;
 	pthread_mutex_t		forks[200];
