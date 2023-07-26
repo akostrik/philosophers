@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+
 int	init_mutex(t_rules *rules)
 {
 	int i;
@@ -70,25 +71,18 @@ int	init_all(t_rules *rules, char **argv)
 	return (0);
 }
 
-int	write_error(char *str)
-{
-	int len;
-
-	len = 0;
-	while (str[len])
-		len++;
-	write(2, "Error: ", 7);
-	write(2, str, len);
-	write(2, "\n", 1);
-	return (1);
-}
-
-int	error_manager(int error)
+static int	error_manager(int error)
 {
 	if (error == 1)
-		return (write_error("At least one wrong argument"));
+	{
+		printf("Error : %s\n", "At least one wrong argument");
+		return (1);
+	}
 	if (error == 2)
-		return (write_error("Fatal error when intializing mutex"));
+	{
+		printf("Error : %s\n", "Fatal error when intializing mutex");
+		return (1);
+	}
 	return (1);
 }
 
@@ -98,10 +92,17 @@ int		main(int argc, char **argv)
 	int		ret;
 
 	if (argc != 5 && argc != 6)
-		return (write_error("Wrong amount of arguments"));
+	{
+		printf("Error : %s\n", "Wrong amount of arguments");
+		return (1);
+	}
 	if ((ret = init_all(&rules, argv)))
+
 		return (error_manager(ret));
 	if (launcher(&rules))
-		return (write_error("There was an error creating the threads"));
+	{
+		printf("Error : %s\n", "There was an error creating the threads");
+		return (1);
+	}
 	return (0);
 }
