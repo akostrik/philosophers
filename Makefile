@@ -1,4 +1,4 @@
-SRCS = error.c main.c utils.c launcher.c
+SRCS = main.c launcher.c utils.c 
 OBJS = $(addprefix ./.build/, $(SRCS))
 OBJS := $(OBJS:%.c=%.o)
 
@@ -10,7 +10,7 @@ philo : ${OBJS}
 
 ./.build/%.o : ./src/%.c
 	mkdir -p ./.build
-	cc -c $< -o $@ -g3 -I ./src -Wall -Werror -Wextra
+	cc -c $< -o $@ -I ./src -Wall -Werror -Wextra
 
 clean :
 	rm -rf ${OBJS}

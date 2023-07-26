@@ -49,27 +49,11 @@ typedef struct			s_rules
 	t_philosopher		philosophers[250];
 }						t_rules;
 
-/*
-** ----- error_manager.c -----
-*/
-
-int						write_error(char *str);
-int						error_manager(int error);
-
-/*
-** ----- utils.c -----
-*/
-
 int						ft_atoi(const char *str);
 void					action_print(t_rules *rules, int id, char *string);
 long long				timestamp(void);
 long long				time_diff(long long past, long long pres);
 void					smart_sleep(long long time, t_rules *rules);
-
-/*
-** ----- launcher.c -----
-*/
-
 int						launcher(t_rules *rules);
 void					exit_launcher(t_rules *rules, t_philosopher *philos);
 
