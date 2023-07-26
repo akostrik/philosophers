@@ -64,12 +64,12 @@ long long	time_diff(long long past, long long pres)
 	return (pres - past);
 }
 
-void	smart_sleep(long long time, t_data *d)
+void	sleep_(long long time, t_data *d)
 {
 	long long i;
 
 	i = timestamp();
-	while (!(d->dieded))
+	while (!(d->dead))
 	{
 		if (time_diff(i, timestamp()) >= time)
 			break ;
@@ -80,7 +80,7 @@ void	smart_sleep(long long time, t_data *d)
 void	action_print(t_data *d, int id, char *str)
 {
 	pthread_mutex_lock(&(d->writing));
-	if (!(d->dieded))
+	if (!(d->dead))
 		printf("%lli %i %s\n", timestamp() - d->first_timestamp, id + 1, str);
 	pthread_mutex_unlock(&(d->writing));
 	return ;

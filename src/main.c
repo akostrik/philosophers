@@ -1,18 +1,18 @@
 #include "philo.h"
 
-static void	init_philos(t_data *d)
+static void	init_phs(t_data *d)
 {
 	int i;
 
 	i = -1;
 	while (++i < d->nb_philo)
 	{
-		d->philosophers[i].id = i;
-		d->philosophers[i].x_ate = 0;
-		d->philosophers[i].left_fork_id = i;
-		d->philosophers[i].right_fork_id = (i + 1) % d->nb_philo;
-		d->philosophers[i].t_last_meal = 0;
-		d->philosophers[i].d = d; /// ?
+		d->phs[i].id = i;
+		d->phs[i].x_ate = 0;
+		d->phs[i].left_fork_id = i;
+		d->phs[i].right_fork_id = (i + 1) % d->nb_philo;
+		d->phs[i].t_last_meal = 0;
+		d->phs[i].d = d; /// ?
 		if (pthread_mutex_init(&(d->forks[i]), NULL))
 			exit_("Intializing mutex");
 	}
@@ -42,8 +42,8 @@ int		main(int argc, char **argv)
 			exit_("arg (nb_philo > 0, nb_philo < 200, t_depth > 60, t_eat > 60, t_sleep > 60, [nb_eats > 0)])");
 	}
 	d.all_ate = 0;
-	d.dieded = 0;
-	init_philos(&d);
+	d.dead = 0;
+	init_phs(&d);
 	launcher(&d);
 	return (0);
 }
