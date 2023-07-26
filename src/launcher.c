@@ -1,25 +1,22 @@
 #include "philo.h"
 
-void	philo_eats(t_philosopher *philo)
+static void	philo_eats(t_philosopher *philo)
 {
-	t_data *d; ///
-
-	d = philo->d;
-	pthread_mutex_lock(&(d->forks[philo->left_fork_id]));
-	action_print(d, philo->id, "has taken a fork");
-	pthread_mutex_lock(&(d->forks[philo->right_fork_id]));
-	action_print(d, philo->id, "has taken a fork");
-	pthread_mutex_lock(&(d->meal_check));
-	action_print(d, philo->id, "is eating");
+	pthread_mutex_lock(&((philo->d)->forks[philo->left_fork_id]));
+	action_print((philo->d), philo->id, "has taken a fork");
+	pthread_mutex_lock(&((philo->d)->forks[philo->right_fork_id]));
+	action_print((philo->d), philo->id, "has taken a fork");
+	pthread_mutex_lock(&((philo->d)->meal_check));
+	action_print((philo->d), philo->id, "is eating");
 	philo->t_last_meal = timestamp();
-	pthread_mutex_unlock(&(d->meal_check));
-	smart_sleep(d->t_eat, d);
+	pthread_mutex_unlock(&((philo->d)->meal_check));
+	smart_sleep((philo->d)->t_eat, (philo->d));
 	(philo->x_ate)++;
-	pthread_mutex_unlock(&(d->forks[philo->left_fork_id]));
-	pthread_mutex_unlock(&(d->forks[philo->right_fork_id]));
+	pthread_mutex_unlock(&((philo->d)->forks[philo->left_fork_id]));
+	pthread_mutex_unlock(&((philo->d)->forks[philo->right_fork_id]));
 }
 
-void	*p_thread(void *void_philosopher)
+static void	*p_thread(void *void_philosopher)
 {
 	int				i;
 	t_philosopher	*philo;
