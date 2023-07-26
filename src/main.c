@@ -52,7 +52,7 @@ static void	life_checker(t_data *d)
 {
 	int i;
 
-	while (!(d->everybody_has_eaten))
+	while (d->everybody_has_eaten == 1)
 	{
 		i = -1;
 		while (++i < d->nb_phs && !(d->dead))
