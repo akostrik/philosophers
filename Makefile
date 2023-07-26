@@ -1,4 +1,4 @@
-SRCS = error.c main.c init.c utils.c launcher.c
+SRCS = error.c main.c utils.c launcher.c
 OBJS = $(addprefix ./.build/, $(SRCS))
 OBJS := $(OBJS:%.c=%.o)
 

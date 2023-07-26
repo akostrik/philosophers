@@ -57,12 +57,6 @@ int						write_error(char *str);
 int						error_manager(int error);
 
 /*
-** ----- init.c -----
-*/
-
-int						init_all(t_rules *rules, char **argv);
-
-/*
 ** ----- utils.c -----
 */
 
