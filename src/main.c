@@ -13,11 +13,9 @@ static void	init_philos(t_data *d)
 		d->philosophers[i].right_fork_id = (i + 1) % d->nb_philo;
 		d->philosophers[i].t_last_meal = 0;
 		d->philosophers[i].d = d; /// ?
-	}
-	i = -1;
-	while (++i < d->nb_philo)
 		if (pthread_mutex_init(&(d->forks[i]), NULL))
 			exit_("Intializing mutex");
+	}
 	if (pthread_mutex_init(&(d->writing), NULL))
 		exit_("Intializing mutex");
 	if (pthread_mutex_init(&(d->meal_check), NULL))
