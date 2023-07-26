@@ -1,11 +1,11 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <sys/time.h>
-# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <unistd.h>
+# include <sys/time.h>
 # include <pthread.h>
 
 struct s_data;
@@ -16,8 +16,8 @@ typedef	struct			s_ph
 {
 	int					id;
 	int					x_ate;
-	int					left_fork_id;
-	int					right_fork_id;
+	int					num_left_ph; //
+	int					num_right_ph;
 	long long			t_last_meal;
 	struct s_data		*d;
 	pthread_t			thread_id;
@@ -44,8 +44,6 @@ void					action_print(t_data *d, int id, char *string);
 long long				timestamp(void);
 long long				time_diff(long long past, long long pres);
 void					sleep_(long long time, t_data *d);
-void					launcher(t_data *d);
-void					exit_launcher(t_data *d, t_ph *phs);
 void					exit_(char *str);
 
 #endif

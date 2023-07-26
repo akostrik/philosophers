@@ -1,4 +1,4 @@
-SRCS = main.c launcher.c utils.c 
+SRCS = main.c utils.c 
 OBJS = $(addprefix ./.build/, $(SRCS))
 OBJS := $(OBJS:%.c=%.o)
 
@@ -19,6 +19,5 @@ fclean : clean
 	rm -f philo
 
 re : fclean all
-
 
 .PHONY : all clean fclean re

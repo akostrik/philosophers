@@ -66,12 +66,12 @@ long long	time_diff(long long past, long long pres)
 
 void	sleep_(long long time, t_data *d)
 {
-	long long i;
+	long long t_start_sleep;
 
-	i = timestamp();
+	t_start_sleep = timestamp();
 	while (!(d->dead))
 	{
-		if (time_diff(i, timestamp()) >= time)
+		if (timestamp() - t_start_sleep  >= time)
 			break ;
 		usleep(50);
 	}
@@ -86,7 +86,7 @@ void	action_print(t_data *d, int id, char *str)
 	return ;
 }
 
-void exit_(char *str)
+void	exit_(char *str)
 {
 	printf("Error : %s\n", str);
 	exit (0);
