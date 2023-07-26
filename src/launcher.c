@@ -43,20 +43,7 @@ void	*p_thread(void *void_philosopher)
 	return (NULL);
 }
 
-void	exit_launcher(t_data *d, t_philosopher *philos)
-{
-	int i;
-
-	i = -1;
-	while (++i < d->nb_philo)
-		pthread_join(philos[i].thread_id, NULL);
-	i = -1;
-	while (++i < d->nb_philo)
-		pthread_mutex_destroy(&(d->forks[i]));
-	pthread_mutex_destroy(&(d->writing));
-}
-
-void	death_checker(t_data *d, t_philosopher *p)
+static void	life_checker(t_data *d, t_philosopher *p)
 {
 	int i;
 
@@ -98,6 +85,12 @@ void	launcher(t_data *d)
 			exit_("Threads creating");
 		phi[i].t_last_meal = timestamp();
 	}
-	death_checker(d, d->philosophers);
-	exit_launcher(d, phi);
+	life_checker(d, d->philosophers);
+	i = -1;
+	while (++i < d->nb_philo)
+		pthread_join(d->philosophers[i].thread_id, NULL);
+	i = -1;
+	while (++i < d->nb_philo)
+		pthread_mutex_destroy(&(d->forks[i]));
+	pthread_mutex_destroy(&(d->writing));
 }
