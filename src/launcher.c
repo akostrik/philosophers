@@ -25,11 +25,11 @@ void	*p_thread(void *void_philosopher)
 	t_philosopher	*philo;
 	t_rules			*rules;
 
-	i = 0;
 	philo = (t_philosopher *)void_philosopher;
 	rules = philo->rules;
 	if (philo->id % 2)
 		usleep(15000);
+	i = 0;
 	while (!(rules->dieded))
 	{
 		philo_eats(philo);

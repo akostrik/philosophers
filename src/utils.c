@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gsmets <gsmets@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/10 18:59:07 by gsmets            #+#    #+#             */
-/*   Updated: 2021/02/17 17:59:19 by gsmets           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 int			ft_atoi(const char *str)
@@ -72,4 +60,10 @@ void		action_print(t_rules *rules, int id, char *string)
 	}
 	pthread_mutex_unlock(&(rules->writing));
 	return ;
+}
+
+void exit_(char *str)
+{
+	printf("Error : %s\n", str);
+	exit (0);
 }

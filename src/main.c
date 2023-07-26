@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gsmets <gsmets@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/10 17:20:40 by gsmets            #+#    #+#             */
-/*   Updated: 2021/02/15 20:29:47 by gsmets           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 int	init_mutex(t_rules *rules)
@@ -54,9 +42,9 @@ int	init_all(t_rules *rules, char **argv)
 	rules->time_sleep = ft_atoi(argv[4]);
 	rules->all_ate = 0;
 	rules->dieded = 0;
-	if (rules->nb_philo < 2 || rules->time_death < 0 || rules->time_eat < 0
-		|| rules->time_sleep < 0 || rules->nb_philo > 250)
-		return (1);
+	if (rules->nb_philo < 1 || rules->time_death < 60 || rules->time_eat < 60
+		|| rules->time_sleep < 60 || rules->nb_philo > 200) /// 2
+		exit_("params (nb_philo > 0, nb_philo < 200, time_die > 60, time_eat > 60, time_sleep > 60)");
 	if (argv[5])
 	{
 		rules->nb_eat = ft_atoi(argv[5]);
@@ -69,12 +57,6 @@ int	init_all(t_rules *rules, char **argv)
 		return (2);
 	init_philosophers(rules);
 	return (0);
-}
-
-static void exit_(char *str)
-{
-	printf("Error : %s\n", str);
-	exit (0);
 }
 
 static int	error_manager(int error)

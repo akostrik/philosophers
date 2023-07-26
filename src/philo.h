@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gsmets <gsmets@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/10 18:30:58 by gsmets            #+#    #+#             */
-/*   Updated: 2021/02/22 10:14:00 by gsmets           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -56,5 +44,6 @@ long long				time_diff(long long past, long long pres);
 void					smart_sleep(long long time, t_rules *rules);
 int						launcher(t_rules *rules);
 void					exit_launcher(t_rules *rules, t_philosopher *philos);
+void					exit_(char *str);
 
 #endif
