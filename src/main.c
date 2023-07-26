@@ -1,28 +1,11 @@
 #include "philo.h"
 
-int	init_mutex(t_data *d)
-{
-	int i;
-
-	i = d->nb_philo;
-	while (--i >= 0)
-	{
-		if (pthread_mutex_init(&(d->forks[i]), NULL))
-			return (1);
-	}
-	if (pthread_mutex_init(&(d->writing), NULL))
-		return (1);
-	if (pthread_mutex_init(&(d->meal_check), NULL))
-		return (1);
-	return (0);
-}
-
 static void	init_philos(t_data *d)
 {
 	int i;
 
-	i = d->nb_philo;
-	while (--i >= 0)
+	i = -1;
+	while (++i < d->nb_philo)
 	{
 		d->philosophers[i].id = i;
 		d->philosophers[i].x_ate = 0;
@@ -31,14 +14,15 @@ static void	init_philos(t_data *d)
 		d->philosophers[i].t_last_meal = 0;
 		d->philosophers[i].d = d; /// ?
 	}
+	i = -1;
+	while (++i < d->nb_philo)
+		if (pthread_mutex_init(&(d->forks[i]), NULL))
+			exit_("Intializing mutex");
+	if (pthread_mutex_init(&(d->writing), NULL))
+		exit_("Intializing mutex");
+	if (pthread_mutex_init(&(d->meal_check), NULL))
+		exit_("Intializing mutex");
 }
-
-// static int	error_manager(int error)
-// {
-// 	if (error == 2)
-// 		exit_("Fatal error when intializing mutex");
-// 	return (1);
-// }
 
 int		main(int argc, char **argv)
 {
@@ -62,9 +46,7 @@ int		main(int argc, char **argv)
 	d.all_ate = 0;
 	d.dieded = 0;
 	init_philos(&d);
-	if (init_mutex(&d))
-		return (2);
 	if (launcher(&d))
-		exit_("There was an error creating the threads");
+		exit_("Threads creating");
 	return (0);
 }
