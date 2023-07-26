@@ -71,18 +71,18 @@ int	init_all(t_rules *rules, char **argv)
 	return (0);
 }
 
+static void exit_(char *str)
+{
+	printf("Error : %s\n", str);
+	exit (0);
+}
+
 static int	error_manager(int error)
 {
 	if (error == 1)
-	{
-		printf("Error : %s\n", "At least one wrong argument");
-		return (1);
-	}
+		exit_("At least one wrong argument");
 	if (error == 2)
-	{
-		printf("Error : %s\n", "Fatal error when intializing mutex");
-		return (1);
-	}
+		exit_("Fatal error when intializing mutex");
 	return (1);
 }
 
@@ -92,17 +92,10 @@ int		main(int argc, char **argv)
 	int		ret;
 
 	if (argc != 5 && argc != 6)
-	{
-		printf("Error : %s\n", "Wrong amount of arguments");
-		return (1);
-	}
+		exit_("Wrong amount of arguments");
 	if ((ret = init_all(&rules, argv)))
-
 		return (error_manager(ret));
 	if (launcher(&rules))
-	{
-		printf("Error : %s\n", "There was an error creating the threads");
-		return (1);
-	}
+		exit_("There was an error creating the threads");
 	return (0);
 }

@@ -89,15 +89,14 @@ int		launcher(t_rules *rules)
 	int				i;
 	t_philosopher	*phi;
 
-	i = 0;
 	phi = rules->philosophers;
 	rules->first_timestamp = timestamp();
-	while (i < rules->nb_philo)
+	i = -1;
+	while (++i < rules->nb_philo)
 	{
 		if (pthread_create(&(phi[i].thread_id), NULL, p_thread, &(phi[i])))
 			return (1);
 		phi[i].t_last_meal = timestamp();
-		i++;
 	}
 	death_checker(rules, rules->philosophers);
 	exit_launcher(rules, phi);
