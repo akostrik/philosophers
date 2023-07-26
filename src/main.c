@@ -44,7 +44,6 @@ int		main(int argc, char **argv)
 	d.all_ate = 0;
 	d.dieded = 0;
 	init_philos(&d);
-	if (launcher(&d))
-		exit_("Threads creating");
+	launcher(&d);
 	return (0);
 }

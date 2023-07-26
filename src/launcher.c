@@ -76,15 +76,15 @@ void	death_checker(t_data *d, t_philosopher *p)
 		}
 		if (d->dieded)
 			break ;
-		i = 0;
-		while (d->nb_eat != -1 && i < d->nb_philo && p[i].x_ate >= d->nb_eat)
-			i++;
+		i = -1;
+		while (d->nb_eat != -1 && ++i < d->nb_philo && p[i].x_ate >= d->nb_eat)
+			;
 		if (i == d->nb_philo)
 			d->all_ate = 1;
 	}
 }
 
-int		launcher(t_data *d)
+void	launcher(t_data *d)
 {
 	int				i;
 	t_philosopher	*phi;
@@ -95,10 +95,9 @@ int		launcher(t_data *d)
 	while (++i < d->nb_philo)
 	{
 		if (pthread_create(&(phi[i].thread_id), NULL, p_thread, &(phi[i])))
-			return (1);
+			exit_("Threads creating");
 		phi[i].t_last_meal = timestamp();
 	}
 	death_checker(d, d->philosophers);
 	exit_launcher(d, phi);
-	return (0);
 }

@@ -42,7 +42,7 @@ void					action_print(t_data *d, int id, char *string);
 long long				timestamp(void);
 long long				time_diff(long long past, long long pres);
 void					smart_sleep(long long time, t_data *d);
-int						launcher(t_data *d);
+void					launcher(t_data *d);
 void					exit_launcher(t_data *d, t_philosopher *philos);
 void					exit_(char *str);
 
