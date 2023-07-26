@@ -1,26 +1,53 @@
 #include "philo.h"
 
-int			ft_atoi(const char *str)
+static int	ft_isdigit(int c)
 {
-	long int	n;
-	int			sign;
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+static int	is_whitespace(char c)
+{
+	if (c == ' ')
+		return (1);
+	if (c == '\f')
+		return (1);
+	if (c == '\n')
+		return (1);
+	if (c == '\r')
+		return (1);
+	if (c == '\t')
+		return (1);
+	if (c == '\v')
+		return (1);
+	return (0);
+}
 
-	n = 0;
+int	ft_atoi(const char *str)
+{
+	size_t	i;
+	int		sign;
+	int		to_return;
+
+	i = 0;
+	while (is_whitespace(str[i]) == 1)
+		i++;
 	sign = 1;
-	while ((*str <= 13 && *str >= 9) || *str == 32)
-		str++;
-	if (*str == '-')
-		return (-1);
-	else if (*str == '+')
-		str++;
-	while (*str)
+	if (str[i] == '-')
 	{
-		if (*str >= '0' && *str <= '9')
-			n = n * 10 + (*str++ - '0');
-		else
-			return (-1);
+		if (!ft_isdigit(str[i + 1]))
+			return (0);
+		sign = -1;
+		i++;
 	}
-	return ((int)(n * sign));
+	if (str[i] == '+')
+		i++;
+	while (str[i] == '0')
+		i++;
+	to_return = 0;
+	while (ft_isdigit(str[i]) == 1)
+		to_return = to_return * 10 + str[i++] - '0';
+	return (sign * to_return);
 }
 
 long long	timestamp(void)
@@ -49,15 +76,11 @@ void		smart_sleep(long long time, t_rules *rules)
 	}
 }
 
-void		action_print(t_rules *rules, int id, char *string)
+void		action_print(t_rules *rules, int id, char *str)
 {
 	pthread_mutex_lock(&(rules->writing));
 	if (!(rules->dieded))
-	{
-		printf("%lli ", timestamp() - rules->first_timestamp);
-		printf("%i ", id + 1);
-		printf("%s\n", string);
-	}
+		printf("%lli %i %s\n", timestamp() - rules->first_timestamp, id + 1, str);
 	pthread_mutex_unlock(&(rules->writing));
 	return ;
 }
