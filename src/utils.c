@@ -6,6 +6,7 @@ static int	ft_isdigit(int c)
 		return (1);
 	return (0);
 }
+
 static int	is_whitespace(char c)
 {
 	if (c == ' ')
@@ -63,12 +64,12 @@ long long	time_diff(long long past, long long pres)
 	return (pres - past);
 }
 
-void		smart_sleep(long long time, t_rules *rules)
+void	smart_sleep(long long time, t_data *d)
 {
 	long long i;
 
 	i = timestamp();
-	while (!(rules->dieded))
+	while (!(d->dieded))
 	{
 		if (time_diff(i, timestamp()) >= time)
 			break ;
@@ -76,12 +77,12 @@ void		smart_sleep(long long time, t_rules *rules)
 	}
 }
 
-void		action_print(t_rules *rules, int id, char *str)
+void	action_print(t_data *d, int id, char *str)
 {
-	pthread_mutex_lock(&(rules->writing));
-	if (!(rules->dieded))
-		printf("%lli %i %s\n", timestamp() - rules->first_timestamp, id + 1, str);
-	pthread_mutex_unlock(&(rules->writing));
+	pthread_mutex_lock(&(d->writing));
+	if (!(d->dieded))
+		printf("%lli %i %s\n", timestamp() - d->first_timestamp, id + 1, str);
+	pthread_mutex_unlock(&(d->writing));
 	return ;
 }
 

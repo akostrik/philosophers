@@ -2,103 +2,103 @@
 
 void	philo_eats(t_philosopher *philo)
 {
-	t_rules *rules;
+	t_data *d; ///
 
-	rules = philo->rules;
-	pthread_mutex_lock(&(rules->forks[philo->left_fork_id]));
-	action_print(rules, philo->id, "has taken a fork");
-	pthread_mutex_lock(&(rules->forks[philo->right_fork_id]));
-	action_print(rules, philo->id, "has taken a fork");
-	pthread_mutex_lock(&(rules->meal_check));
-	action_print(rules, philo->id, "is eating");
+	d = philo->d;
+	pthread_mutex_lock(&(d->forks[philo->left_fork_id]));
+	action_print(d, philo->id, "has taken a fork");
+	pthread_mutex_lock(&(d->forks[philo->right_fork_id]));
+	action_print(d, philo->id, "has taken a fork");
+	pthread_mutex_lock(&(d->meal_check));
+	action_print(d, philo->id, "is eating");
 	philo->t_last_meal = timestamp();
-	pthread_mutex_unlock(&(rules->meal_check));
-	smart_sleep(rules->time_eat, rules);
+	pthread_mutex_unlock(&(d->meal_check));
+	smart_sleep(d->t_eat, d);
 	(philo->x_ate)++;
-	pthread_mutex_unlock(&(rules->forks[philo->left_fork_id]));
-	pthread_mutex_unlock(&(rules->forks[philo->right_fork_id]));
+	pthread_mutex_unlock(&(d->forks[philo->left_fork_id]));
+	pthread_mutex_unlock(&(d->forks[philo->right_fork_id]));
 }
 
 void	*p_thread(void *void_philosopher)
 {
 	int				i;
 	t_philosopher	*philo;
-	t_rules			*rules;
+	t_data			*d;
 
 	philo = (t_philosopher *)void_philosopher;
-	rules = philo->rules;
+	d = philo->d;
 	if (philo->id % 2)
 		usleep(15000);
 	i = 0;
-	while (!(rules->dieded))
+	while (!(d->dieded))
 	{
 		philo_eats(philo);
-		if (rules->all_ate)
+		if (d->all_ate)
 			break ;
-		action_print(rules, philo->id, "is sleeping");
-		smart_sleep(rules->time_sleep, rules);
-		action_print(rules, philo->id, "is thinking");
+		action_print(d, philo->id, "is sleeping");
+		smart_sleep(d->t_sleep, d);
+		action_print(d, philo->id, "is thinking");
 		i++;
 	}
 	return (NULL);
 }
 
-void	exit_launcher(t_rules *rules, t_philosopher *philos)
+void	exit_launcher(t_data *d, t_philosopher *philos)
 {
 	int i;
 
 	i = -1;
-	while (++i < rules->nb_philo)
+	while (++i < d->nb_philo)
 		pthread_join(philos[i].thread_id, NULL);
 	i = -1;
-	while (++i < rules->nb_philo)
-		pthread_mutex_destroy(&(rules->forks[i]));
-	pthread_mutex_destroy(&(rules->writing));
+	while (++i < d->nb_philo)
+		pthread_mutex_destroy(&(d->forks[i]));
+	pthread_mutex_destroy(&(d->writing));
 }
 
-void	death_checker(t_rules *r, t_philosopher *p)
+void	death_checker(t_data *d, t_philosopher *p)
 {
 	int i;
 
-	while (!(r->all_ate))
+	while (!(d->all_ate))
 	{
 		i = -1;
-		while (++i < r->nb_philo && !(r->dieded))
+		while (++i < d->nb_philo && !(d->dieded))
 		{
-			pthread_mutex_lock(&(r->meal_check));
-			if (time_diff(p[i].t_last_meal, timestamp()) > r->time_death)
+			pthread_mutex_lock(&(d->meal_check));
+			if (time_diff(p[i].t_last_meal, timestamp()) > d->t_death)
 			{
-				action_print(r, i, "died");
-				r->dieded = 1;
+				action_print(d, i, "died");
+				d->dieded = 1;
 			}
-			pthread_mutex_unlock(&(r->meal_check));
+			pthread_mutex_unlock(&(d->meal_check));
 			usleep(100);
 		}
-		if (r->dieded)
+		if (d->dieded)
 			break ;
 		i = 0;
-		while (r->nb_eat != -1 && i < r->nb_philo && p[i].x_ate >= r->nb_eat)
+		while (d->nb_eat != -1 && i < d->nb_philo && p[i].x_ate >= d->nb_eat)
 			i++;
-		if (i == r->nb_philo)
-			r->all_ate = 1;
+		if (i == d->nb_philo)
+			d->all_ate = 1;
 	}
 }
 
-int		launcher(t_rules *rules)
+int		launcher(t_data *d)
 {
 	int				i;
 	t_philosopher	*phi;
 
-	phi = rules->philosophers;
-	rules->first_timestamp = timestamp();
+	phi = d->philosophers;
+	d->first_timestamp = timestamp();
 	i = -1;
-	while (++i < rules->nb_philo)
+	while (++i < d->nb_philo)
 	{
 		if (pthread_create(&(phi[i].thread_id), NULL, p_thread, &(phi[i])))
 			return (1);
 		phi[i].t_last_meal = timestamp();
 	}
-	death_checker(rules, rules->philosophers);
-	exit_launcher(rules, phi);
+	death_checker(d, d->philosophers);
+	exit_launcher(d, phi);
 	return (0);
 }
