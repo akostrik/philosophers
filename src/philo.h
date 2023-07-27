@@ -16,8 +16,6 @@ typedef	struct			s_ph
 {
 	int					id;
 	int					x_ate;
-	int					num_left_ph; //
-	int					num_right_ph;
 	long long			t_last_meal;
 	struct s_data		*d;
 	pthread_t			thread_id;
@@ -40,7 +38,7 @@ typedef struct			s_data
 }						t_data;
 
 int						ft_atoi(const char *str);
-void					action_print(t_data *d, int id, char *string);
+void					print_action(t_data *d, int id, char *string);
 long long				timestamp(void);
 void					sleep_(long long time, t_data *d);
 void					exit_(char *str);

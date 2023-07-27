@@ -2,7 +2,7 @@
 
 // при одним философе не выходит
 
-// pthread_mutex_init attr = NULL - the default mutex attributes are used
+// pthread_mutex_init attr = NULL - the default mutex attributes
 static void	init_phs(t_data *d)
 {
 	int	i;
@@ -12,8 +12,6 @@ static void	init_phs(t_data *d)
 	{
 		d->phs[i].id = i;
 		d->phs[i].x_ate = 0;
-		d->phs[i].num_left_ph = i; // i -1
-		d->phs[i].num_right_ph = (i + 1) % d->nb_phs;
 		d->phs[i].t_last_meal = 0;
 		d->phs[i].d = d; /// ?
 		if (pthread_mutex_init(&(d->forks[i]), NULL))
@@ -27,9 +25,9 @@ static void	*ph_thread(void *ph)
 		usleep(15000);
 	while (!((((t_ph *)ph)->d)->smb_is_dead))
 	{
-		pthread_mutex_lock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->num_left_ph]));
+		pthread_mutex_lock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->id]));
 		print_action((((t_ph *)ph)->d), ((t_ph *)ph)->id, "has taken a fork");
-		pthread_mutex_lock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->num_right_ph]));
+		pthread_mutex_lock(&((((t_ph *)ph)->d)->forks[(((t_ph *)ph)->id + 1) % ((t_ph *)ph)->d->nb_phs]));
 		print_action((((t_ph *)ph)->d), ((t_ph *)ph)->id, "has taken a fork");
 		pthread_mutex_lock(&((((t_ph *)ph)->d)->meal_check));
 		print_action((((t_ph *)ph)->d), ((t_ph *)ph)->id, "is eating");
@@ -37,8 +35,8 @@ static void	*ph_thread(void *ph)
 		pthread_mutex_unlock(&((((t_ph *)ph)->d)->meal_check));
 		sleep_((((t_ph *)ph)->d)->t_eat, (((t_ph *)ph)->d));
 		(((t_ph *)ph)->x_ate)++;
-		pthread_mutex_unlock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->num_left_ph]));
-		pthread_mutex_unlock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->num_right_ph]));
+		pthread_mutex_unlock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->id]));
+		pthread_mutex_unlock(&((((t_ph *)ph)->d)->forks[(((t_ph *)ph)->id + 1) % ((t_ph *)ph)->d->nb_phs]));
 		if ((((t_ph *)ph)->d)->everybody_has_eaten)
 			break ;
 		print_action(((t_ph *)ph)->d, ((t_ph *)ph)->id, "is sleeping");
@@ -75,6 +73,9 @@ static void	life_checker(t_data *d)
 			d->everybody_has_eaten = 1;
 	}
 }
+
+// stores ID of  the  new thread in the buffer pointed to by thread
+// ID used to refer to the thread in subsequent calls to other pthreads functions
 
 void	launcher(t_data *d)
 {

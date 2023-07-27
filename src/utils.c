@@ -64,12 +64,8 @@ void	sleep_(long long time, t_data *d)
 	long long t_start_sleep;
 
 	t_start_sleep = timestamp();
-	while (!(d->smb_is_dead))
-	{
-		if (timestamp() - t_start_sleep  >= time)
-			break ;
+	while (!(d->smb_is_dead) && timestamp() - t_start_sleep < time)
 		usleep(50);
-	}
 }
 
 void	print_action(t_data *d, int id, char *str)
