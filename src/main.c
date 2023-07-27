@@ -25,14 +25,14 @@ static void	*ph_thread(void *ph)
 {
 	if (((t_ph *)ph)->id % 2)
 		usleep(15000);
-	while (!((((t_ph *)ph)->d)->dead))
+	while (!((((t_ph *)ph)->d)->smb_is_dead))
 	{
 		pthread_mutex_lock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->num_left_ph]));
-		action_print((((t_ph *)ph)->d), ((t_ph *)ph)->id, "has taken a fork");
+		print_action((((t_ph *)ph)->d), ((t_ph *)ph)->id, "has taken a fork");
 		pthread_mutex_lock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->num_right_ph]));
-		action_print((((t_ph *)ph)->d), ((t_ph *)ph)->id, "has taken a fork");
+		print_action((((t_ph *)ph)->d), ((t_ph *)ph)->id, "has taken a fork");
 		pthread_mutex_lock(&((((t_ph *)ph)->d)->meal_check));
-		action_print((((t_ph *)ph)->d), ((t_ph *)ph)->id, "is eating");
+		print_action((((t_ph *)ph)->d), ((t_ph *)ph)->id, "is eating");
 		((t_ph *)ph)->t_last_meal = timestamp();
 		pthread_mutex_unlock(&((((t_ph *)ph)->d)->meal_check));
 		sleep_((((t_ph *)ph)->d)->t_eat, (((t_ph *)ph)->d));
@@ -41,9 +41,9 @@ static void	*ph_thread(void *ph)
 		pthread_mutex_unlock(&((((t_ph *)ph)->d)->forks[((t_ph *)ph)->num_right_ph]));
 		if ((((t_ph *)ph)->d)->everybody_has_eaten)
 			break ;
-		action_print(((t_ph *)ph)->d, ((t_ph *)ph)->id, "is sleeping");
+		print_action(((t_ph *)ph)->d, ((t_ph *)ph)->id, "is sleeping");
 		sleep_((((t_ph *)ph)->d)->t_sleep, ((t_ph *)ph)->d);
-		action_print(((t_ph *)ph)->d, ((t_ph *)ph)->id, "is thinking");
+		print_action(((t_ph *)ph)->d, ((t_ph *)ph)->id, "is thinking");
 	}
 	return (NULL);
 }
@@ -55,21 +55,21 @@ static void	life_checker(t_data *d)
 	while (d->everybody_has_eaten == 1)
 	{
 		i = -1;
-		while (++i < d->nb_phs && !(d->dead))
+		while (++i < d->nb_phs && d->smb_is_dead == 0)
 		{
 			pthread_mutex_lock(&(d->meal_check));
-			if (time_diff(d->phs[i].t_last_meal, timestamp()) > d->t_death)
+			if (timestamp() - d->phs[i].t_last_meal > d->t_death)
 			{
-				action_print(d, i, "died");
-				d->dead = 1;
+				print_action(d, i, "died");
+				d->smb_is_dead = 1;
 			}
 			pthread_mutex_unlock(&(d->meal_check));
 			usleep(100);
 		}
-		if (d->dead)
+		if (d->smb_is_dead)
 			break ;
 		i = -1;
-		while (d->nb_eat != -1 && ++i < d->nb_phs && d->phs[i].x_ate >= d->nb_eat)
+		while (d->nb_eat != -1 && ++i < d->nb_phs && d->phs[i].x_ate >= d->nb_eat) // d->nb_eat != -1
 			;
 		if (i == d->nb_phs)
 			d->everybody_has_eaten = 1;
@@ -118,7 +118,7 @@ int		main(int argc, char **argv)
 			exit_("arg (nb_philo > 0, nb_philo < 200, t_depth > 0, t_eat > 0, t_sleep > 0, [nb_eats > 0)])");
 	}
 	d.everybody_has_eaten = 0;
-	d.dead = 0;
+	d.smb_is_dead = 0;
 	if (pthread_mutex_init(&(d.writing), NULL))
 		exit_("Intializing mutex");
 	if (pthread_mutex_init(&(d.meal_check), NULL))

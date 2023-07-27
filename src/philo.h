@@ -30,7 +30,7 @@ typedef struct			s_data
 	int					t_eat;
 	int					t_sleep;
 	int					nb_eat;
-	int					dead;
+	int					smb_is_dead;
 	int					everybody_has_eaten;
 	long long			first_timestamp;
 	pthread_mutex_t		meal_check;
@@ -42,7 +42,6 @@ typedef struct			s_data
 int						ft_atoi(const char *str);
 void					action_print(t_data *d, int id, char *string);
 long long				timestamp(void);
-long long				time_diff(long long past, long long pres);
 void					sleep_(long long time, t_data *d);
 void					exit_(char *str);
 

@@ -59,17 +59,12 @@ long long	timestamp(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
-long long	time_diff(long long past, long long pres)
-{
-	return (pres - past);
-}
-
 void	sleep_(long long time, t_data *d)
 {
 	long long t_start_sleep;
 
 	t_start_sleep = timestamp();
-	while (!(d->dead))
+	while (!(d->smb_is_dead))
 	{
 		if (timestamp() - t_start_sleep  >= time)
 			break ;
@@ -77,10 +72,10 @@ void	sleep_(long long time, t_data *d)
 	}
 }
 
-void	action_print(t_data *d, int id, char *str)
+void	print_action(t_data *d, int id, char *str)
 {
 	pthread_mutex_lock(&(d->writing));
-	if (!(d->dead))
+	if (!(d->smb_is_dead))
 		printf("%lli %i %s\n", timestamp() - d->first_timestamp, id + 1, str);
 	pthread_mutex_unlock(&(d->writing));
 	return ;
