@@ -28,17 +28,18 @@ static void	*ph_thread(void *ph0)
 		usleep(15000); // связано с t_eat ...
 	while (ph->d->evrybody_is_alive == 1)
 	{
+		if (ph->d->everybody_has_got_nb_meals_max == 1)
+			break ;
 		pthread_mutex_lock(&((ph->d)->forks[ph->id]));
 		print_action(ph->d, ph->id, "has taken a fork");
 		pthread_mutex_lock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
 		print_action(ph->d, ph->id, "has taken a fork");
-		pthread_mutex_lock(&((ph->d)->check_if_everyone_is_alive));
-		print_action(ph->d, ph->id, "is eating");
+		pthread_mutex_lock(&((ph->d)->check_if_should_stop));
+		print_action(ph->d, ph->id, "is eating *****");
 		ph->t_last_meal = timestamp();
-		pthread_mutex_unlock(&((ph->d)->check_if_everyone_is_alive));
+		pthread_mutex_unlock(&((ph->d)->check_if_should_stop));
 		sleep_(ph->d->t_eat, ph->d);
 		(ph->nb_meals)++;
-		printf("*** %d nb_meals = %d\n",ph->id,ph->nb_meals);
 		pthread_mutex_unlock(&((ph->d)->forks[ph->id]));
 		pthread_mutex_unlock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
 		if (ph->d->everybody_has_got_nb_meals_max == 1)
@@ -57,15 +58,15 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 	while (d->evrybody_is_alive == 1 && d->everybody_has_got_nb_meals_max == 0)
 	{
 		i = -1;
-		while (++i < d->nb_phs && d->evrybody_is_alive == 1)
+		while (d->evrybody_is_alive == 1 &&++i < d->nb_phs)
 		{
-			pthread_mutex_lock(&(d->check_if_everyone_is_alive));
+			pthread_mutex_lock(&(d->check_if_should_stop));
 			if (timestamp() - d->phs[i].t_last_meal > d->t_death)
 			{
 				print_action(d, i, "died");
 				d->evrybody_is_alive = 0;
 			}
-			pthread_mutex_unlock(&(d->check_if_everyone_is_alive));
+			pthread_mutex_unlock(&(d->check_if_should_stop));
 			usleep(100);
 		}
 		if (d->evrybody_is_alive == 1 && d->nb_meals_max != -1)
@@ -126,7 +127,7 @@ int		main(int argc, char **argv)
 	d.evrybody_is_alive = 1;
 	if (pthread_mutex_init(&(d.writing), NULL))
 		exit_("Intializing mutex");
-	if (pthread_mutex_init(&(d.check_if_everyone_is_alive), NULL))
+	if (pthread_mutex_init(&(d.check_if_should_stop), NULL))
 		exit_("Intializing mutex");
 	init_phs(&d);
 	launcher(&d);

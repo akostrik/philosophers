@@ -31,7 +31,7 @@ typedef struct			s_data
 	int					evrybody_is_alive;
 	int					everybody_has_got_nb_meals_max;
 	long long			first_timestamp;
-	pthread_mutex_t		check_if_everyone_is_alive;
+	pthread_mutex_t		check_if_should_stop;
 	pthread_mutex_t		forks[200];
 	pthread_mutex_t		writing;
 	t_ph				phs[200];
