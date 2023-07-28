@@ -15,7 +15,7 @@ struct s_data;
 typedef	struct			s_ph
 {
 	int					id;
-	int					x_ate;
+	int					how_many_meals;
 	long long			t_last_meal;
 	struct s_data		*d;
 	pthread_t			thread_id;

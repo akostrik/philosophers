@@ -11,7 +11,7 @@ static void	init_phs(t_data *d)
 	while (++i < d->nb_phs)
 	{
 		d->phs[i].id = i;
-		d->phs[i].x_ate = 0;
+		d->phs[i].how_many_meals = 0;
 		d->phs[i].t_last_meal = 0;
 		d->phs[i].d = d; /// ?
 		if (pthread_mutex_init(&(d->forks[i]), NULL))
@@ -37,8 +37,8 @@ static void	*ph_thread(void *ph0)
 		ph->t_last_meal = timestamp();
 		pthread_mutex_unlock(&((ph->d)->check_if_everyone_is_alive));
 		sleep_(ph->d->t_eat, ph->d);
-		(ph->x_ate)++;
-		printf("*** %d has eaten %d times\n",ph->id,ph->x_ate);
+		(ph->how_many_meals)++;
+		printf("*** %d has eaten %d times\n",ph->id,ph->how_many_meals);
 		pthread_mutex_unlock(&((ph->d)->forks[ph->id]));
 		pthread_mutex_unlock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
 		if (ph->d->everybody_has_eaten)
@@ -73,7 +73,7 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 		d->everybody_has_eaten = 1;
 		i = -1;
 		while (d->nb_eat != -1 && ++i < d->nb_phs)
-			if (d->phs[i].x_ate < d->nb_eat)
+			if (d->phs[i].how_many_meals < d->nb_eat)
 			{
 				d->everybody_has_eaten = 0;
 				break ;
