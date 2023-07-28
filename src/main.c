@@ -26,7 +26,7 @@ static void	*ph_thread(void *ph0)
 	ph = (t_ph *)ph0;
 	if (ph->id % 2)
 		usleep(15000); // связано с t_eat ...
-	while ((ph->d)->evrybody_is_alive == 1)
+	while (ph->d->evrybody_is_alive == 1)
 	{
 		pthread_mutex_lock(&((ph->d)->forks[ph->id]));
 		print_action((ph->d), ph->id, "has taken a fork");
@@ -50,7 +50,7 @@ static void	*ph_thread(void *ph0)
 	return (NULL);
 }
 
-static void	sleep_as_lons_as_everyone_is_ok(t_data *d)
+static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 {
 	int i;
 
@@ -96,7 +96,7 @@ void	launcher(t_data *d)
 			exit_("Threads creating");
 		d->phs[i].t_last_meal = timestamp();
 	}
-	sleep_as_lons_as_everyone_is_ok(d);
+	sleep_as_lons_as_everyone_is_alive(d);
 	i = -1;
 	while (++i < d->nb_phs)
 		pthread_join(d->phs[i].thread_id, NULL);
