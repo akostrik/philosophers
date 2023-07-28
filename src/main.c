@@ -70,14 +70,17 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 		}
 		if (!(d->evrybody_is_alive))
 			break ;
-		d->everybody_has_got_nb_meals_max = 1;
-		i = -1;
-		while (d->nb_meals_max != -1 && ++i < d->nb_phs)
-			if (d->phs[i].nb_meals < d->nb_meals_max)
-			{
-				d->everybody_has_got_nb_meals_max = 0;
-				break ;
-			}
+		if (d->nb_meals_max != -1)
+		{
+			d->everybody_has_got_nb_meals_max = 1;
+			i = -1;
+			while (++i < d->nb_phs)
+				if (d->phs[i].nb_meals < d->nb_meals_max)
+				{
+					d->everybody_has_got_nb_meals_max = 0;
+					break ;
+				}
+		}
 	}
 }
 
