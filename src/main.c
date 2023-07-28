@@ -41,7 +41,7 @@ static void	*ph_thread(void *ph0)
 		printf("*** %d nb_meals = %d\n",ph->id,ph->nb_meals);
 		pthread_mutex_unlock(&((ph->d)->forks[ph->id]));
 		pthread_mutex_unlock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
-		if (ph->d->everybody_has_got_nb_meals_max)
+		if (ph->d->everybody_has_got_nb_meals_max == 1)
 			break ;
 		print_action(ph->d, ph->id, "is sleeping");
 		sleep_(ph->d->t_sleep, ph->d);
@@ -54,7 +54,7 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 {
 	int i;
 
-	while (d->everybody_has_got_nb_meals_max == 1)
+	while (d->evrybody_is_alive == 1 && d->everybody_has_got_nb_meals_max == 0)
 	{
 		i = -1;
 		while (++i < d->nb_phs && d->evrybody_is_alive == 1)
@@ -68,9 +68,7 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 			pthread_mutex_unlock(&(d->check_if_everyone_is_alive));
 			usleep(100);
 		}
-		if (d->evrybody_is_alive == 0)
-			break ;
-		if (d->nb_meals_max != -1)
+		if (d->evrybody_is_alive == 1 && d->nb_meals_max != -1)
 		{
 			d->everybody_has_got_nb_meals_max = 1;
 			i = -1;
