@@ -111,19 +111,19 @@ int		main(int argc, char **argv)
 	t_data	d;
 
 	if (argc < 5 || argc > 6) 
-		exit_("arg (nb_philo > 0, nb_philo < 200, t_depth > 0, t_eat > 0, t_sleep > 0, [nb_eats > 0)])");
+		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many_times_max > 0])");
 	d.nb_phs = ft_atoi(argv[1]);
 	d.t_death = ft_atoi(argv[2]);
 	d.t_eat = ft_atoi(argv[3]);
 	d.t_sleep = ft_atoi(argv[4]);
 	if (d.nb_phs < 1 || d.nb_phs > 200 || d.t_death < 0 || d.t_eat < 0 || d.t_sleep < 0 ) /// 2
-		exit_("arg (nb_philo > 0, nb_philo < 200, t_depth > 0, t_eat > 0, t_sleep > 0, [nb_eats > 0)])");
+		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many_times_max > 0])");
 	d.how_many_meals_max = -1;
 	if (argv[5] != NULL)
 	{
 		d.how_many_meals_max = ft_atoi(argv[5]);
 		if (d.how_many_meals_max <= 0)
-			exit_("arg (nb_philo > 0, nb_philo < 200, t_depth > 0, t_eat > 0, t_sleep > 0, [nb_eats > 0)])");
+			exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many_times_max > 0])");
 	}
 	d.everybody_has_eaten = 0;
 	d.evrybody_is_alive = 1;
