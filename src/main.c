@@ -32,10 +32,10 @@ static void	*ph_thread(void *ph0)
 		print_action((ph->d), ph->id, "has taken a fork");
 		pthread_mutex_lock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
 		print_action((ph->d), ph->id, "has taken a fork");
-		pthread_mutex_lock(&((ph->d)->meal_check));
+		pthread_mutex_lock(&((ph->d)->check_if_everyone_is_alive));
 		print_action((ph->d), ph->id, "is eating");
 		ph->t_last_meal = timestamp();
-		pthread_mutex_unlock(&((ph->d)->meal_check));
+		pthread_mutex_unlock(&((ph->d)->check_if_everyone_is_alive));
 		sleep_((ph->d)->t_eat, (ph->d));
 		(ph->x_ate)++;
 		printf("*** %d has eaten %d times\n",ph->id,ph->x_ate);
@@ -59,13 +59,13 @@ static void	sleep_as_lons_as_everyone_is_ok(t_data *d)
 		i = -1;
 		while (++i < d->nb_phs && d->evrybody_is_alive == 1)
 		{
-			pthread_mutex_lock(&(d->meal_check));
+			pthread_mutex_lock(&(d->check_if_everyone_is_alive));
 			if (timestamp() - d->phs[i].t_last_meal > d->t_death)
 			{
 				print_action(d, i, "died");
 				d->evrybody_is_alive = 0;
 			}
-			pthread_mutex_unlock(&(d->meal_check));
+			pthread_mutex_unlock(&(d->check_if_everyone_is_alive));
 			usleep(100);
 		}
 		if (!(d->evrybody_is_alive))
@@ -129,7 +129,7 @@ int		main(int argc, char **argv)
 	d.evrybody_is_alive = 1;
 	if (pthread_mutex_init(&(d.writing), NULL))
 		exit_("Intializing mutex");
-	if (pthread_mutex_init(&(d.meal_check), NULL))
+	if (pthread_mutex_init(&(d.check_if_everyone_is_alive), NULL))
 		exit_("Intializing mutex");
 	init_phs(&d);
 	launcher(&d);
