@@ -55,31 +55,24 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 {
 	int i;
 
-	while (d->evrybody_is_alive == 1 && d->everybody_has_got_nb_meals_max == 0)
+	i = 0;
+	while (d->evrybody_is_alive == 1)
 	{
-		i = -1;
-		while (d->evrybody_is_alive == 1 &&++i < d->nb_phs)
-		{
-			pthread_mutex_lock(&(d->check_if_should_stop));
-			if (timestamp() - d->phs[i].t_last_meal > d->t_death)
-			{
-				print_action(d, i, "died");
-				d->evrybody_is_alive = 0;
-			}
-			pthread_mutex_unlock(&(d->check_if_should_stop));
-			usleep(100);
-		}
-		if (d->evrybody_is_alive == 1 && d->nb_meals_max != -1)
-		{
+		if (i == 0)
 			d->everybody_has_got_nb_meals_max = 1;
-			i = -1;
-			while (++i < d->nb_phs)
-				if (d->phs[i].nb_meals < d->nb_meals_max)
-				{
-					d->everybody_has_got_nb_meals_max = 0;
-					break ;
-				}
+		pthread_mutex_lock(&(d->check_if_should_stop));
+		if (timestamp() - d->phs[i].t_last_meal > d->t_death)
+		{
+			print_action(d, i, "died");
+			d->evrybody_is_alive = 0;
 		}
+		if (d->nb_meals_max != -1 && d->phs[i].nb_meals < d->nb_meals_max)
+			d->everybody_has_got_nb_meals_max = 0;
+		pthread_mutex_unlock(&(d->check_if_should_stop));
+		if (i == d->nb_phs - 1 && d->everybody_has_got_nb_meals_max == 1)
+			break ;
+		i = (i + 1) % d->nb_phs;
+		usleep(100);
 	}
 }
 
