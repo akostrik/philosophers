@@ -15,7 +15,7 @@ struct s_data;
 typedef	struct			s_ph
 {
 	int					id;
-	int					how_many_meals;
+	int					nb_meals;
 	long long			t_last_meal;
 	struct s_data		*d;
 	pthread_t			thread_id;
@@ -27,7 +27,7 @@ typedef struct			s_data
 	int					t_death;
 	int					t_eat;
 	int					t_sleep;
-	int					how_many_meals_max;
+	int					nb_meals_max;
 	int					evrybody_is_alive;
 	int					everybody_has_eaten;
 	long long			first_timestamp;

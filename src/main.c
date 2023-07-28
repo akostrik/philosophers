@@ -11,7 +11,7 @@ static void	init_phs(t_data *d)
 	while (++i < d->nb_phs)
 	{
 		d->phs[i].id = i;
-		d->phs[i].how_many_meals = 0;
+		d->phs[i].nb_meals = 0;
 		d->phs[i].t_last_meal = 0;
 		d->phs[i].d = d; /// ?
 		if (pthread_mutex_init(&(d->forks[i]), NULL))
@@ -37,8 +37,8 @@ static void	*ph_thread(void *ph0)
 		ph->t_last_meal = timestamp();
 		pthread_mutex_unlock(&((ph->d)->check_if_everyone_is_alive));
 		sleep_(ph->d->t_eat, ph->d);
-		(ph->how_many_meals)++;
-		printf("*** %d has eaten %d times\n",ph->id,ph->how_many_meals);
+		(ph->nb_meals)++;
+		printf("*** %d nb_meals = %d\n",ph->id,ph->nb_meals);
 		pthread_mutex_unlock(&((ph->d)->forks[ph->id]));
 		pthread_mutex_unlock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
 		if (ph->d->everybody_has_eaten)
@@ -72,8 +72,8 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 			break ;
 		d->everybody_has_eaten = 1;
 		i = -1;
-		while (d->how_many_meals_max != -1 && ++i < d->nb_phs)
-			if (d->phs[i].how_many_meals < d->how_many_meals_max)
+		while (d->nb_meals_max != -1 && ++i < d->nb_phs)
+			if (d->phs[i].nb_meals < d->nb_meals_max)
 			{
 				d->everybody_has_eaten = 0;
 				break ;
@@ -111,20 +111,16 @@ int		main(int argc, char **argv)
 	t_data	d;
 
 	if (argc < 5 || argc > 6) 
-		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many_times_max > 0])");
+		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many > 0])");
 	d.nb_phs = ft_atoi(argv[1]);
 	d.t_death = ft_atoi(argv[2]);
 	d.t_eat = ft_atoi(argv[3]);
 	d.t_sleep = ft_atoi(argv[4]);
-	if (d.nb_phs < 1 || d.nb_phs > 200 || d.t_death < 0 || d.t_eat < 0 || d.t_sleep < 0 ) /// 2
-		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many_times_max > 0])");
-	d.how_many_meals_max = -1;
-	if (argv[5] != NULL)
-	{
-		d.how_many_meals_max = ft_atoi(argv[5]);
-		if (d.how_many_meals_max <= 0)
-			exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many_times_max > 0])");
-	}
+	d.nb_meals_max = -1;
+	if (argc == 6)
+		d.nb_meals_max = ft_atoi(argv[5]);
+	if (d.nb_phs < 1 || d.nb_phs > 200 || d.t_death < 0 || d.t_eat < 0 || d.t_sleep < 0 || (argv[5] != NULL && d.nb_meals_max <= 0)) /// 2
+		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many > 0])");
 	d.everybody_has_eaten = 0;
 	d.evrybody_is_alive = 1;
 	if (pthread_mutex_init(&(d.writing), NULL))
