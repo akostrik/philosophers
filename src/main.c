@@ -29,22 +29,22 @@ static void	*ph_thread(void *ph0)
 	while (ph->d->evrybody_is_alive == 1)
 	{
 		pthread_mutex_lock(&((ph->d)->forks[ph->id]));
-		print_action((ph->d), ph->id, "has taken a fork");
+		print_action(ph->d, ph->id, "has taken a fork");
 		pthread_mutex_lock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
-		print_action((ph->d), ph->id, "has taken a fork");
+		print_action(ph->d, ph->id, "has taken a fork");
 		pthread_mutex_lock(&((ph->d)->check_if_everyone_is_alive));
-		print_action((ph->d), ph->id, "is eating");
+		print_action(ph->d, ph->id, "is eating");
 		ph->t_last_meal = timestamp();
 		pthread_mutex_unlock(&((ph->d)->check_if_everyone_is_alive));
-		sleep_((ph->d)->t_eat, (ph->d));
+		sleep_(ph->d->t_eat, ph->d);
 		(ph->x_ate)++;
 		printf("*** %d has eaten %d times\n",ph->id,ph->x_ate);
 		pthread_mutex_unlock(&((ph->d)->forks[ph->id]));
 		pthread_mutex_unlock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
-		if ((ph->d)->everybody_has_eaten)
+		if (ph->d->everybody_has_eaten)
 			break ;
 		print_action(ph->d, ph->id, "is sleeping");
-		sleep_((ph->d)->t_sleep, ph->d);
+		sleep_(ph->d->t_sleep, ph->d);
 		print_action(ph->d, ph->id, "is thinking");
 	}
 	return (NULL);
