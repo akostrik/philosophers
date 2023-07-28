@@ -41,7 +41,7 @@ static void	*ph_thread(void *ph0)
 		printf("*** %d nb_meals = %d\n",ph->id,ph->nb_meals);
 		pthread_mutex_unlock(&((ph->d)->forks[ph->id]));
 		pthread_mutex_unlock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
-		if (ph->d->everybody_has_eaten)
+		if (ph->d->everybody_has_got_nb_meals_max)
 			break ;
 		print_action(ph->d, ph->id, "is sleeping");
 		sleep_(ph->d->t_sleep, ph->d);
@@ -54,7 +54,7 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 {
 	int i;
 
-	while (d->everybody_has_eaten == 1)
+	while (d->everybody_has_got_nb_meals_max == 1)
 	{
 		i = -1;
 		while (++i < d->nb_phs && d->evrybody_is_alive == 1)
@@ -70,12 +70,12 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 		}
 		if (!(d->evrybody_is_alive))
 			break ;
-		d->everybody_has_eaten = 1;
+		d->everybody_has_got_nb_meals_max = 1;
 		i = -1;
 		while (d->nb_meals_max != -1 && ++i < d->nb_phs)
 			if (d->phs[i].nb_meals < d->nb_meals_max)
 			{
-				d->everybody_has_eaten = 0;
+				d->everybody_has_got_nb_meals_max = 0;
 				break ;
 			}
 	}
@@ -121,7 +121,7 @@ int		main(int argc, char **argv)
 		d.nb_meals_max = ft_atoi(argv[5]);
 	if (d.nb_phs < 1 || d.nb_phs > 200 || d.t_death < 0 || d.t_eat < 0 || d.t_sleep < 0 || (argv[5] != NULL && d.nb_meals_max <= 0)) /// 2
 		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many > 0])");
-	d.everybody_has_eaten = 0;
+	d.everybody_has_got_nb_meals_max = 0;
 	d.evrybody_is_alive = 1;
 	if (pthread_mutex_init(&(d.writing), NULL))
 		exit_("Intializing mutex");

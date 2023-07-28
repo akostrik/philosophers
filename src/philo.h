@@ -29,7 +29,7 @@ typedef struct			s_data
 	int					t_sleep;
 	int					nb_meals_max;
 	int					evrybody_is_alive;
-	int					everybody_has_eaten;
+	int					everybody_has_got_nb_meals_max;
 	long long			first_timestamp;
 	pthread_mutex_t		check_if_everyone_is_alive;
 	pthread_mutex_t		forks[200];
