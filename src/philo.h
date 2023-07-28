@@ -27,7 +27,7 @@ typedef struct			s_data
 	int					t_death;
 	int					t_eat;
 	int					t_sleep;
-	int					nb_eat;
+	int					how_many_meals_max;
 	int					evrybody_is_alive;
 	int					everybody_has_eaten;
 	long long			first_timestamp;

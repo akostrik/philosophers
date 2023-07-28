@@ -72,8 +72,8 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 			break ;
 		d->everybody_has_eaten = 1;
 		i = -1;
-		while (d->nb_eat != -1 && ++i < d->nb_phs)
-			if (d->phs[i].how_many_meals < d->nb_eat)
+		while (d->how_many_meals_max != -1 && ++i < d->nb_phs)
+			if (d->phs[i].how_many_meals < d->how_many_meals_max)
 			{
 				d->everybody_has_eaten = 0;
 				break ;
@@ -118,11 +118,11 @@ int		main(int argc, char **argv)
 	d.t_sleep = ft_atoi(argv[4]);
 	if (d.nb_phs < 1 || d.nb_phs > 200 || d.t_death < 0 || d.t_eat < 0 || d.t_sleep < 0 ) /// 2
 		exit_("arg (nb_philo > 0, nb_philo < 200, t_depth > 0, t_eat > 0, t_sleep > 0, [nb_eats > 0)])");
-	d.nb_eat = -1;
+	d.how_many_meals_max = -1;
 	if (argv[5] != NULL)
 	{
-		d.nb_eat = ft_atoi(argv[5]);
-		if (d.nb_eat <= 0)
+		d.how_many_meals_max = ft_atoi(argv[5]);
+		if (d.how_many_meals_max <= 0)
 			exit_("arg (nb_philo > 0, nb_philo < 200, t_depth > 0, t_eat > 0, t_sleep > 0, [nb_eats > 0)])");
 	}
 	d.everybody_has_eaten = 0;
