@@ -68,7 +68,7 @@ static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
 			pthread_mutex_unlock(&(d->check_if_everyone_is_alive));
 			usleep(100);
 		}
-		if (!(d->evrybody_is_alive))
+		if (d->evrybody_is_alive == 0)
 			break ;
 		if (d->nb_meals_max != -1)
 		{
