@@ -64,14 +64,14 @@ void	sleep_(long long time, t_data *d)
 	long long t_start_sleep;
 
 	t_start_sleep = timestamp();
-	while (!(d->smb_is_dead) && timestamp() - t_start_sleep < time)
+	while (d->evrybody_is_alive && timestamp() - t_start_sleep < time)
 		usleep(50);
 }
 
 void	print_action(t_data *d, int id, char *str)
 {
 	pthread_mutex_lock(&(d->writing));
-	if (!(d->smb_is_dead))
+	if (d->evrybody_is_alive)
 		printf("%lli %i %s\n", timestamp() - d->first_timestamp, id + 1, str);
 	pthread_mutex_unlock(&(d->writing));
 	return ;
