@@ -1,8 +1,8 @@
-SRC_NAME =	main.c utils.c utils2.c philo_action.c
-SRC = $(addprefix ./src/,$(SRC_NAME))
-OBJ = $(SRC_NAME:.c=.o)
+SRC  =	main.c utils.c utils2.c philo_action.c
+SRC := $(addprefix ./src/,$(SRC))
+OBJ  = $(SRC_NAME:.c=.o)
 OBJ := $(addprefix ./objs/, $(OBJ))
-CC = clang -pthread -Wall -Wextra -Werror
+CC   = clang -pthread -Wall -Wextra -Werror
 
 all: philo
 
@@ -23,9 +23,9 @@ fclean: clean
 re: fclean all
 
 git:
-	@git add *
-	@git commit -m "philo"
-	@git push
+	git add *
+	git commit -m "philo"
+	git push
 
 norme:
 	norminette $(SRC)
