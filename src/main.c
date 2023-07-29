@@ -8,10 +8,10 @@ int	everyone_is_healthy(t_data *d)
 	if (d->everyone_is_healthy == 0)
 	{
 		pthread_mutex_unlock(&d->i_take_dairy_of_health);
-		return (1);
+		return (0);
 	}
 	pthread_mutex_unlock(&d->i_take_dairy_of_health);
-	return (0);
+	return (1);
 }
 
 void	sleep_as_long_as_everyone_is_healthy(t_data *d, int stop_ms)
@@ -41,7 +41,7 @@ void	*thread_philo(void *philo0)
 	{
 		// if (philo->d->nbr_meals_max != -1 && philo->nbr_meals == philo->d->nbr_meals_max)
 		// 	return (NULL);
-		if (everyone_is_healthy(philo->d))
+		if (everyone_is_healthy(philo->d) == 0)
 			return (NULL);
 		pthread_mutex_lock(&(philo->d->i_take_fork[philo->id]));
 		print_message(philo, "has taken a fork");
@@ -60,11 +60,11 @@ void	*thread_philo(void *philo0)
 		// 	philo->d->eat_count += 1;
 		// 	pthread_mutex_unlock(&philo->d->m_eat_count);
 		// }
-		if (everyone_is_healthy(philo->d))
+		if (everyone_is_healthy(philo->d) == 0)
 			return (NULL);
 		print_message(philo, "is sleeping");
 		sleep_as_long_as_everyone_is_healthy(philo->d, philo->d->t_slp);
-		if (everyone_is_healthy(philo->d))
+		if (everyone_is_healthy(philo->d) == 0)
 			return (NULL);
 		print_message(philo, "is thinking");
 	}
