@@ -21,8 +21,8 @@ void	*thread_philo(void *philo0)
 	philo = (t_philo *)philo0;
 	while (1)
 	{
-		if (philo->d->nbr_meals_max != -1 && philo->nbr_eat == philo->d->nbr_meals_max)
-			return (NULL);
+		// if (philo->d->nbr_meals_max != -1 && philo->nbr_meals == philo->d->nbr_meals_max)
+		// 	return (NULL);
 		if (check_good(philo->d))
 			return (NULL);
 		pthread_mutex_lock(&(philo->d->i_take_fork[philo->id]));
@@ -38,7 +38,7 @@ void	*thread_philo(void *philo0)
 		// if (philo->d->nbr_meals_max != -1)
 		// {
 		// 	pthread_mutex_lock(&philo->d->m_eat_count);
-		// 	philo->nbr_eat += 1;
+		// 	philo->nbr_meals += 1;
 		// 	philo->d->eat_count += 1;
 		// 	pthread_mutex_unlock(&philo->d->m_eat_count);
 		// }
@@ -91,8 +91,7 @@ int	main(int argc, char const *argv[])
 		d.philos[i].id = i;
 		d.philos[i].t_last_meal = d.t_start;
 		d.philos[i].t_next_meal = d.t_start + d.t_die;
-		d.philos[i].nbr_eat = 0;
-		// d.philos[i].l_fork = &d.i_take_fork[i];
+		// d.philos[i].nbr_meals = 0;
 		d.philos[i].unused2 = &d.i_take_fork[(i + 1) % d.nbr_philo];
 		pthread_create(&d.philos[i].thread, NULL, thread_philo, &d.philos[i]);
 		usleep(20);

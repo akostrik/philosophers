@@ -14,7 +14,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	long long		t_last_meal;
 	long long		t_next_meal;
-	int				nbr_eat;
+	int				nbr_meals;
 	struct s_data	*d;
 	pthread_mutex_t	*unused;
 	pthread_mutex_t	*unused2;
