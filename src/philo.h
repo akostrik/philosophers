@@ -14,10 +14,10 @@ typedef struct s_philo
 	pthread_t		thread;
 	long long		t_last_meal;
 	long long		t_next_meal;
-	int				nbr_meals;
 	struct s_data	*d;
 	pthread_mutex_t	*unused;
 	pthread_mutex_t	*unused2;
+	int				nbr_meals;
 }	t_philo;
 
 typedef struct s_data
@@ -26,15 +26,16 @@ typedef struct s_data
 	int				t_die;
 	int				t_eat;
 	int				t_slp;
-	int				nbr_meals_max;
-	t_philo			philos[200];
 	long long		t_start;
+	t_philo			philos[200];
 	int				we_should_continue;
 	pthread_mutex_t	i_take_fork[200];
-	pthread_mutex_t	m_good;
+	pthread_mutex_t	m_we_should_continue;
+	pthread_mutex_t	i_take_printer;
+
 	// int				eat_count;
 	// pthread_mutex_t	m_eat_count;
-	pthread_mutex_t	i_take_printer;
+	int				nbr_meals_max; //
 }	t_data;
 
 int			ft_strlen(const char *str);
