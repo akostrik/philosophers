@@ -18,10 +18,10 @@ typedef struct s_philo
 	pthread_mutex_t	m_eating;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
-	struct s_main	*d;
+	struct s_data	*d;
 }	t_philo;
 
-typedef struct s_main
+typedef struct s_data
 {
 	int				nbr_philo;
 	int				timeToDie;
@@ -30,14 +30,14 @@ typedef struct s_main
 	int				nbrEat;
 	int				good;
 	int				eat_count;
+	t_philo			philos[200];
+	long long		time;
+	pthread_mutex_t	forks[200];
+	pthread_t		monitor;
 	pthread_mutex_t	m_eat_count;
 	pthread_mutex_t	m_good;
-	long long		time;
-	t_philo			philos[200];
-	pthread_t		monitor;
-	pthread_mutex_t	forks[200];
-	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_dead;
+	pthread_mutex_t	m_print;
 }	t_data;
 
 typedef struct s_args
