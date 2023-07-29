@@ -56,18 +56,18 @@ void init1(int argc, char const *argv[], t_data *d)
 	d->t_eat = ft_atoi(argv[3]);
 	d->t_slp = ft_atoi(argv[4]);
 	d->nbrEat = -1;
-	if (argc == 6)
-		d->nbrEat = ft_atoi(argv[5]);
+	// if (argc == 6)
+	// 	d->nbrEat = ft_atoi(argv[5]);
 	if (d->nbr_philo <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nbrEat != -1))
 		exit_("Error inputs");
 	d->we_should_continue = 1;
-	d->eat_count = 0;
+	// d->eat_count = 0;
 	pthread_mutex_init(&d->i_take_printer, NULL);
+	pthread_mutex_init(&d->m_good, NULL);
+	// pthread_mutex_init(&d->m_eat_count, NULL);
 	i = -1;
 	while (++i < d->nbr_philo)
 		pthread_mutex_init(&d->i_take_fork[i], NULL);
-	pthread_mutex_init(&d->m_good, NULL);
-	// pthread_mutex_init(&d->m_eat_count, NULL);
 	d->t_start = get_time();
 }
 
