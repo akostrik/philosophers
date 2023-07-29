@@ -42,7 +42,7 @@ int			ft_strlen(const char *str);
 int			ft_atoi(const char *str);
 void		ft_putnbr_fd(int n, int fd);
 long long	get_time(void);
-void		ft_usleep(t_data *d, int stop_ms);
+void		sleep_as_long_as_everyone_is_healthy(t_data *d, int stop_ms);
 void		print_message(t_philo *philo, char *str);
 void		exit_(char *str);
 

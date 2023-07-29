@@ -60,7 +60,7 @@ long long	get_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	ft_usleep(t_data *d, int stop_ms)
+void	sleep_as_long_as_everyone_is_healthy(t_data *d, int stop_ms)
 {
 	long long	end_ms;
 

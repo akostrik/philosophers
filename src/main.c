@@ -32,7 +32,7 @@ void	*thread_philo(void *philo0)
 		print_message(philo, "is eating");
 		philo->t_last_meal = get_time();
 		philo->t_next_meal = philo->t_last_meal + philo->d->t_die;
-		ft_usleep(philo->d, philo->d->t_eat);
+		sleep_as_long_as_everyone_is_healthy(philo->d, philo->d->t_eat);
 		pthread_mutex_unlock(&(philo->d->i_take_fork[(philo->id + 1) % philo->d->nbr_philo]));
 		pthread_mutex_unlock(&(philo->d->i_take_fork[philo->id]));
 		// if (philo->d->nbr_meals_max != -1)
@@ -45,7 +45,7 @@ void	*thread_philo(void *philo0)
 		if (check_health(philo->d))
 			return (NULL);
 		print_message(philo, "is sleeping");
-		ft_usleep(philo->d, philo->d->t_slp);
+		sleep_as_long_as_everyone_is_healthy(philo->d, philo->d->t_slp);
 		if (check_health(philo->d))
 			return (NULL);
 		print_message(philo, "is thinking");
