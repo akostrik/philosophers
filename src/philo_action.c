@@ -11,8 +11,11 @@ void	print_message(t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->d->m_print);
 }
 
-void	start_half(t_data *d, int i)
+void	start_philos(t_data *d)
 {
+	int	i;
+
+	i = 0;
 	while (i < d->nbr_philo)
 	{
 		d->philos[i].d = d;
@@ -23,7 +26,7 @@ void	start_half(t_data *d, int i)
 		d->philos[i].l_fork = &d->forks[i];
 		d->philos[i].r_fork = &d->forks[(i + 1) % d->nbr_philo];
 		pthread_create(&d->philos[i].thread, NULL, philosopher, &d->philos[i]);
-		i ++;
+		i++;
 		usleep(10);
 	}
 }

@@ -85,9 +85,7 @@ int	create_philo(t_data *d)
 	pthread_mutex_init(&d->m_good, NULL);
 	pthread_mutex_init(&d->m_eat_count, NULL);
 	d->time = get_time();
-	start_half(d, 0);
-	// ft_usleep(d, 10);
-	// start_half(d, 1);
+	start_philos(d);
 	pthread_create(&d->monitor, NULL, monitor, d);
 	pthread_join(d->monitor, NULL);
 	i = -1;
