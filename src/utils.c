@@ -59,22 +59,3 @@ long long	get_time(void)
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
-
-void	sleep_as_long_as_everyone_is_healthy(t_data *d, int stop_ms)
-{
-	long long	end_ms;
-
-	end_ms = get_time() + stop_ms;
-	while (get_time() < end_ms)
-	{
-		pthread_mutex_lock(&d->i_take_dairy_of_health);
-		if (d->everyone_is_healthy == 0)
-		{
-			pthread_mutex_unlock(&d->i_take_dairy_of_health);
-			return ;
-		}
-		pthread_mutex_unlock(&d->i_take_dairy_of_health);
-		usleep(100);
-	}
-}
-
