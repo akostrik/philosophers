@@ -28,7 +28,7 @@ typedef struct s_data
 	int				t_slp;
 	int				nbrEat;
 	t_philo			philos[200];
-	pthread_mutex_t	forks[200];
+	pthread_mutex_t	i_take_fork[200];
 	long long		t_start;
 	pthread_t		monitor;
 	int				eat_count;

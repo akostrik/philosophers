@@ -44,7 +44,7 @@ void init1(int argc, char const *argv[], t_data *d)
 	pthread_mutex_init(&d->i_take_printer, NULL);
 	i = -1;
 	while (++i < d->nbr_philo)
-		pthread_mutex_init(&d->forks[i], NULL);
+		pthread_mutex_init(&d->i_take_fork[i], NULL);
 	pthread_mutex_init(&d->m_good, NULL);
 	pthread_mutex_init(&d->m_eat_count, NULL);
 	d->t_start = get_time();
@@ -64,8 +64,8 @@ int	main(int argc, char const *argv[])
 		d.philos[i].last_eat = d.t_start;
 		d.philos[i].limit_eat = d.t_start + d.t_die;
 		d.philos[i].nbr_eat = 0;
-		d.philos[i].l_fork = &d.forks[i];
-		d.philos[i].r_fork = &d.forks[(i + 1) % d.nbr_philo];
+		d.philos[i].l_fork = &d.i_take_fork[i];
+		d.philos[i].r_fork = &d.i_take_fork[(i + 1) % d.nbr_philo];
 		pthread_create(&d.philos[i].thread, NULL, thread_philo, &d.philos[i]);
 		usleep(10);
 	}
@@ -100,6 +100,6 @@ int	main(int argc, char const *argv[])
 	while (++i < d.nbr_philo)
 		pthread_detach(d.philos[i].thread);
 	while (++i < d.nbr_philo)
-		pthread_mutex_destroy(&d.forks[i]);
+		pthread_mutex_destroy(&d.i_take_fork[i]);
 	return (0);
 }
