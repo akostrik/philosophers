@@ -23,9 +23,9 @@ fclean: clean
 re: fclean all
 
 git:
-	@git add *
-	@git commit -m "philo"
-	@git push
+	git add *
+	git commit -m "philo"
+	git push
 
 norme:
 	norminette $(SRC)

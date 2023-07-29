@@ -1,2 +1,3 @@
 philo
-/.build
+objs/
+.vscode/
