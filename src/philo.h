@@ -13,12 +13,12 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <stddef.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <pthread.h>
 # include <sys/time.h>
 # include <unistd.h>
-
 
 typedef struct s_philo
 {
@@ -45,9 +45,9 @@ typedef struct s_main
 	pthread_mutex_t	m_eat_count;
 	pthread_mutex_t	m_good;
 	long long		time;
-	t_philo			*philos;
+	t_philo			philos[200];
 	pthread_t		monitor;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	forks[200];
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_dead;
 }	t_main;

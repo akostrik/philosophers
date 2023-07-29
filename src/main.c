@@ -1,3 +1,4 @@
+// 5  800 200 200 7
 
 #include "philo.h"
 
@@ -31,10 +32,8 @@ void	ft_clear(t_main *d)
 	i = -1;
 	while (++i < d->nbr_philo)
 		pthread_detach(d->philos[i].thread);
-	free(d->philos);
 	while (++i < d->nbr_philo)
 		pthread_mutex_destroy(&d->forks[i]);
-	free(d->forks);
 }
 
 int	create_philo(t_main *d)
@@ -42,8 +41,6 @@ int	create_philo(t_main *d)
 	int	i;
 
 	d->eat_count = 0;
-	d->philos = malloc(sizeof(t_philo) * d->nbr_philo);
-	d->forks = malloc(sizeof(pthread_mutex_t) * d->nbr_philo);
 	pthread_mutex_init(&d->m_print, NULL);
 	i = -1;
 	while (++i < d->nbr_philo)
