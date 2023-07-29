@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int	monitor_eat(t_main *status)
+int	monitor_eat(t_data *status)
 {
 	pthread_mutex_lock(&status->m_eat_count);
 	if (status->eat_count >= status->nbr_philo * status->nbrEat
@@ -28,7 +28,7 @@ int	monitor_eat(t_main *status)
 	return (0);
 }
 
-int	monitor_life(t_main *status, int i)
+int	monitor_life(t_data *status, int i)
 {
 	if (get_time() > status->philos[i].limit_eat)
 	{
@@ -45,10 +45,10 @@ int	monitor_life(t_main *status, int i)
 
 void	*monitor(void *arg)
 {
-	t_main		*status;
+	t_data		*status;
 	int			i;
 
-	status = (t_main *)arg;
+	status = (t_data *)arg;
 	while (1)
 	{
 		i = -1;

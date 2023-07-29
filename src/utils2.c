@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int	check_good(t_main *status)
+int	check_good(t_data *status)
 {
 	pthread_mutex_lock(&status->m_good);
 	if (!status->good)

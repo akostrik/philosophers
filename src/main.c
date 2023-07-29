@@ -25,7 +25,7 @@ void	*philosopher(void *arg)
 	}
 }
 
-void	ft_clear(t_main *d)
+void	ft_clear(t_data *d)
 {
 	int	i;
 
@@ -36,7 +36,7 @@ void	ft_clear(t_main *d)
 		pthread_mutex_destroy(&d->forks[i]);
 }
 
-int	create_philo(t_main *d)
+int	create_philo(t_data *d)
 {
 	int	i;
 
@@ -57,7 +57,7 @@ int	create_philo(t_main *d)
 	return (0);
 }
 
-int	check_inputs(t_main *d)
+int	check_inputs(t_data *d)
 {
 	if (!(d->nbr_philo > 0))
 		return (1);
@@ -74,7 +74,7 @@ int	check_inputs(t_main *d)
 
 int	main(int argc, char const *argv[])
 {
-	t_main	d;
+	t_data	d;
 
 	if (argc <= 4 || argc >= 6)
 	{

@@ -23,7 +23,7 @@ void	print_message(t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->d->m_print);
 }
 
-void	find_forks(t_main *status, int id)
+void	find_forks(t_data *status, int id)
 {
 	status->philos[id].l_fork = &status->forks[id];
 	if (id + 1 >= status->nbr_philo)
@@ -32,7 +32,7 @@ void	find_forks(t_main *status, int id)
 		status->philos[id].r_fork = &status->forks[id + 1];
 }
 
-void	start_half(t_main *status, int i)
+void	start_half(t_data *status, int i)
 {
 	while (i < status->nbr_philo)
 	{

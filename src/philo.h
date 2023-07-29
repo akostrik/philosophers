@@ -50,21 +50,21 @@ typedef struct s_main
 	pthread_mutex_t	forks[200];
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_dead;
-}	t_main;
+}	t_data;
 
 typedef struct s_args
 {
-	t_main	*status;
+	t_data	*status;
 	t_philo	*philo;
 }	t_args;
 
 int			ft_strlen(const char *str);
 int			ft_atoi(const char *str);
-int			check_good(t_main *status);
+int			check_good(t_data *status);
 long long	get_time(void);
 void		*philosopher(void *arg);
-void		start_half(t_main *status, int i);
-void		ft_usleep(t_main *status, int stop_ms);
+void		start_half(t_data *status, int i);
+void		ft_usleep(t_data *status, int stop_ms);
 void		ft_putnbr_fd(int n, int fd);
 void		print_message(t_philo *philo, char *str);
 void		philo_eat(t_philo *philo);
