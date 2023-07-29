@@ -1,4 +1,4 @@
-SRC_NAME =	main.c utils.c utils2.c philo_action.c monitor.c
+SRC_NAME =	main.c utils.c utils2.c philo_action.c
 SRC = $(addprefix ./src/,$(SRC_NAME))
 OBJ = $(SRC_NAME:.c=.o)
 OBJ := $(addprefix ./objs/, $(OBJ))
