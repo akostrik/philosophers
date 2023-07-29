@@ -26,7 +26,7 @@ typedef struct s_data
 	int				nbr_philo;
 	int				t_die;
 	int				t_eat;
-	int				t_sleep;
+	int				t_slp;
 	int				nbrEat;
 	int				good;
 	int				eat_count;

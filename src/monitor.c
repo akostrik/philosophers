@@ -1,10 +1,9 @@
 #include "philo.h"
 
-int	monitor_eat(t_data *d)
+int	monitor_count_meals(t_data *d)
 {
 	pthread_mutex_lock(&d->m_eat_count);
-	if (d->eat_count >= d->nbr_philo * d->nbrEat
-		&& d->nbrEat != -1)
+	if (d->eat_count >= d->nbr_philo * d->nbrEat && d->nbrEat != -1)
 	{
 		pthread_mutex_lock(&d->m_good);
 		d->good = 0;
@@ -43,7 +42,7 @@ void	*monitor(void *arg)
 		while (++i < d->nbr_philo)
 		{
 			pthread_mutex_lock(&d->philos[i].m_eating);
-			if (monitor_life(d, i) || monitor_eat(d))
+			if (monitor_life(d, i) || monitor_count_meals(d))
 			{
 				pthread_mutex_unlock(&d->philos[i].m_eating);
 				return (NULL);

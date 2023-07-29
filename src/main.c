@@ -18,22 +18,11 @@ void	*philosopher(void *arg)
 		if (check_good(philo->d))
 			return (NULL);
 		print_message(philo, "is sleeping");
-		ft_usleep(philo->d, philo->d->t_sleep);
+		ft_usleep(philo->d, philo->d->t_slp);
 		if (check_good(philo->d))
 			return (NULL);
 		print_message(philo, "is thinking");
 	}
-}
-
-void	ft_clear(t_data *d)
-{
-	int	i;
-
-	i = -1;
-	while (++i < d->nbr_philo)
-		pthread_detach(d->philos[i].thread);
-	while (++i < d->nbr_philo)
-		pthread_mutex_destroy(&d->forks[i]);
 }
 
 int	create_philo(t_data *d)
@@ -53,7 +42,11 @@ int	create_philo(t_data *d)
 	start_half(d, 1);
 	pthread_create(&d->monitor, NULL, monitor, d);
 	pthread_join(d->monitor, NULL);
-	ft_clear(d);
+	i = -1;
+	while (++i < d->nbr_philo)
+		pthread_detach(d->philos[i].thread);
+	while (++i < d->nbr_philo)
+		pthread_mutex_destroy(&d->forks[i]);
 	return (0);
 }
 
@@ -66,11 +59,11 @@ int	main(int argc, char const *argv[])
 	d.nbr_philo = ft_atoi(argv[1]);
 	d.t_die = ft_atoi(argv[2]);
 	d.t_eat = ft_atoi(argv[3]);
-	d.t_sleep = ft_atoi(argv[4]);
+	d.t_slp = ft_atoi(argv[4]);
 	d.nbrEat = -1;
 	if (argc == 6)
 		d.nbrEat = ft_atoi(argv[5]);
-	if (d.nbr_philo <= 0 || d.t_eat <= 0 || d.t_sleep <= 0 || d.t_die <= 0 || (argc == 6 && d.nbrEat != -1))
+	if (d.nbr_philo <= 0 || d.t_eat <= 0 || d.t_slp <= 0 || d.t_die <= 0 || (argc == 6 && d.nbrEat != -1))
 		exit_("Error inputs");
 	d.good = 1;
 	create_philo(&d);
