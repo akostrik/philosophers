@@ -110,7 +110,7 @@ int	main(int argc, char const *argv[])
 		{
 			d.everyone_is_healthy = 0;
 			// pthread_mutex_lock(&d.i_take_printer);
-			printf("%lld %d died\n", get_time() - d.t_start, i + 1);
+			printf("%5lld %d died\n", get_time() - d.t_start, i + 1);
 			// pthread_mutex_unlock(&d.i_take_printer);
 			// print_message(&(d.philos[i]), "has taken a fork");
 			break ;
