@@ -32,23 +32,6 @@ int	monitor_life(t_data *d, int i)
 	return (0);
 }
 
-void	*monitor(void *arg)
-{
-	t_data		*d;
-	int			i;
-
-	d = (t_data *)arg;
-	i = -1;
-	while (1)
-	{
-		if (monitor_life(d, i) || monitor_count_meals(d))
-			return (NULL);
-		i = (i + 1) % d->nbr_philo;
-		if (i == 0)
-			usleep(100);
-	}
-}
-
 void	*thread_philo(void *philo0)
 {
 	t_philo	*philo;
@@ -116,8 +99,15 @@ int	main(int argc, char const *argv[])
 		pthread_create(&d.philos[i].thread, NULL, thread_philo, &d.philos[i]);
 		usleep(10);
 	}
-	pthread_create(&d.monitor, NULL, monitor, &d);
-	pthread_join(d.monitor, NULL);
+	i = -1;
+	while (1)
+	{
+		if (monitor_life(&d, i) || monitor_count_meals(&d))
+			break ;
+		i = (i + 1) % d.nbr_philo;
+		if (i == 0)
+			usleep(100);
+	}
 	i = -1;
 	while (++i < d.nbr_philo)
 		pthread_detach(d.philos[i].thread);
