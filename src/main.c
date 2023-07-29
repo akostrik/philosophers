@@ -2,7 +2,7 @@
 
 #include "philo.h"
 
-int	check_health(t_data *d)
+int	check_if_everyone_is_healthy(t_data *d)
 {
 	pthread_mutex_lock(&d->i_take_dairy_of_health);
 	if (d->everyone_is_healthy == 0)
@@ -23,7 +23,7 @@ void	*thread_philo(void *philo0)
 	{
 		// if (philo->d->nbr_meals_max != -1 && philo->nbr_meals == philo->d->nbr_meals_max)
 		// 	return (NULL);
-		if (check_health(philo->d))
+		if (check_if_everyone_is_healthy(philo->d))
 			return (NULL);
 		pthread_mutex_lock(&(philo->d->i_take_fork[philo->id]));
 		print_message(philo, "has taken a fork");
@@ -42,11 +42,11 @@ void	*thread_philo(void *philo0)
 		// 	philo->d->eat_count += 1;
 		// 	pthread_mutex_unlock(&philo->d->m_eat_count);
 		// }
-		if (check_health(philo->d))
+		if (check_if_everyone_is_healthy(philo->d))
 			return (NULL);
 		print_message(philo, "is sleeping");
 		sleep_as_long_as_everyone_is_healthy(philo->d, philo->d->t_slp);
-		if (check_health(philo->d))
+		if (check_if_everyone_is_healthy(philo->d))
 			return (NULL);
 		print_message(philo, "is thinking");
 	}
