@@ -2,36 +2,6 @@
 
 #include "philo.h"
 
-int	monitor_count_meals(t_data *d)
-{
-	pthread_mutex_lock(&d->m_eat_count);
-	if (d->eat_count >= d->nbr_philo * d->nbrEat && d->nbrEat != -1)
-	{
-		pthread_mutex_lock(&d->m_good);
-		d->good = 0;
-		pthread_mutex_unlock(&d->m_good);
-		pthread_mutex_unlock(&d->m_eat_count);
-		return (1);
-	}
-	pthread_mutex_unlock(&d->m_eat_count);
-	return (0);
-}
-
-int	monitor_life(t_data *d, int i)
-{
-	if (get_time() > d->philos[i].limit_eat)
-	{
-		pthread_mutex_lock(&d->m_print);
-		pthread_mutex_lock(&d->m_good);
-		d->good = 0;
-		pthread_mutex_unlock(&d->m_good);
-		printf("%lld %d died\n", get_time() - d->time, i + 1);
-		pthread_mutex_unlock(&d->m_print);
-		return (1);
-	}
-	return (0);
-}
-
 void	*thread_philo(void *philo0)
 {
 	t_philo	*philo;
@@ -102,8 +72,26 @@ int	main(int argc, char const *argv[])
 	i = -1;
 	while (1)
 	{
-		if (monitor_life(&d, i) || monitor_count_meals(&d))
+		pthread_mutex_lock(&d.m_eat_count);
+		if (d.eat_count >= d.nbr_philo * d.nbrEat && d.nbrEat != -1)
+		{
+			pthread_mutex_lock(&d.m_good);
+			d.good = 0;
+			pthread_mutex_unlock(&d.m_good);
+			pthread_mutex_unlock(&d.m_eat_count);
 			break ;
+		}
+		pthread_mutex_unlock(&d.m_eat_count);
+		if (get_time() > d.philos[i].limit_eat)
+		{
+			pthread_mutex_lock(&d.m_print);
+			pthread_mutex_lock(&d.m_good);
+			d.good = 0;
+			pthread_mutex_unlock(&d.m_good);
+			printf("%lld %d died\n", get_time() - d.time, i + 1);
+			pthread_mutex_unlock(&d.m_print);
+			return (1);
+		}
 		i = (i + 1) % d.nbr_philo;
 		if (i == 0)
 			usleep(100);
