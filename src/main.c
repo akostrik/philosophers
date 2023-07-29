@@ -92,7 +92,6 @@ int	main(int argc, char const *argv[])
 		d.philos[i].t_last_meal = d.t_start;
 		d.philos[i].t_next_meal = d.t_start + d.t_die;
 		// d.philos[i].nbr_meals = 0;
-		d.philos[i].unused2 = &d.i_take_fork[(i + 1) % d.nbr_philo];
 		pthread_create(&d.philos[i].thread, NULL, thread_philo, &d.philos[i]);
 		usleep(20);
 	}
@@ -113,15 +112,16 @@ int	main(int argc, char const *argv[])
 			pthread_mutex_lock(&d.i_take_printer);
 			printf("%lld %d died\n", get_time() - d.t_start, i + 1);
 			pthread_mutex_unlock(&d.i_take_printer);
-			break ; //return (1);
+			break ;
 		}
 		i = (i + 1) % d.nbr_philo;
 		usleep(10);
 	}
 	i = -1;
 	while (++i < d.nbr_philo)
-		pthread_detach(d.philos[i].thread);
+		pthread_join(d.philos[i].thread, NULL);
 	while (++i < d.nbr_philo)
 		pthread_mutex_destroy(&d.i_take_fork[i]);
+	pthread_mutex_destroy(&d.i_take_printer);
 	return (0);
 }
