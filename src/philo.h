@@ -26,7 +26,7 @@ typedef struct s_data
 	int				t_die;
 	int				t_eat;
 	int				t_slp;
-	int				nbrEat;
+	int				nbr_meals_max;
 	t_philo			philos[200];
 	long long		t_start;
 	int				we_should_continue;

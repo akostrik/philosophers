@@ -14,7 +14,7 @@ void	philo_eat(t_philo *philo)
 	ft_usleep(philo->d, philo->d->t_eat);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
-	// if (philo->d->nbrEat != -1)
+	// if (philo->d->nbr_meals_max != -1)
 	// {
 	// 	pthread_mutex_lock(&philo->d->m_eat_count);
 	// 	philo->nbr_eat += 1;
@@ -30,7 +30,7 @@ void	*thread_philo(void *philo0)
 	philo = (t_philo *)philo0;
 	while (1)
 	{
-		if (philo->d->nbrEat != -1 && philo->nbr_eat == philo->d->nbrEat)
+		if (philo->d->nbr_meals_max != -1 && philo->nbr_eat == philo->d->nbr_meals_max)
 			return (NULL);
 		if (check_good(philo->d))
 			return (NULL);
@@ -55,10 +55,10 @@ void init1(int argc, char const *argv[], t_data *d)
 	d->t_die = ft_atoi(argv[2]);
 	d->t_eat = ft_atoi(argv[3]);
 	d->t_slp = ft_atoi(argv[4]);
-	d->nbrEat = -1;
+	d->nbr_meals_max = -1;
 	// if (argc == 6)
-	// 	d->nbrEat = ft_atoi(argv[5]);
-	if (d->nbr_philo <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nbrEat != -1))
+	// 	d->nbr_meals_max = ft_atoi(argv[5]);
+	if (d->nbr_philo <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nbr_meals_max != -1))
 		exit_("Error inputs");
 	d->we_should_continue = 1;
 	// d->eat_count = 0;
@@ -94,7 +94,7 @@ int	main(int argc, char const *argv[])
 	while (1)
 	{
 		// pthread_mutex_lock(&d.m_eat_count);
-		// if (d.eat_count >= d.nbr_philo * d.nbrEat && d.nbrEat != -1)
+		// if (d.eat_count >= d.nbr_philo * d.nbr_meals_max && d.nbr_meals_max != -1)
 		// {
 		// 	pthread_mutex_lock(&d.m_good);
 		// 	d.we_should_continue = 0;
