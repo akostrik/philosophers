@@ -30,7 +30,6 @@ typedef struct s_data
 	t_philo			philos[200];
 	int				everyone_is_healthy;
 	pthread_mutex_t	i_take_fork[200];
-	pthread_mutex_t	i_take_dairy_of_health;
 	pthread_mutex_t	i_take_printer;
 
 	// int				eat_count;

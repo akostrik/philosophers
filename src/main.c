@@ -78,7 +78,6 @@ void init1(int argc, char const *argv[], t_data *d)
 	d->everyone_is_healthy = 1;
 	// d->eat_count = 0;
 	pthread_mutex_init(&d->i_take_printer, NULL);
-	// pthread_mutex_init(&d->i_take_dairy_of_health, NULL);
 	// pthread_mutex_init(&d->m_eat_count, NULL);
 	i = -1;
 	while (++i < d->nbr_philo)
