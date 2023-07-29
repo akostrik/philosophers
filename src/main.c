@@ -73,26 +73,6 @@ void	*philosopher(void *philo0)
 	}
 }
 
-void	start_philos(t_data *d)
-{
-	int	i;
-
-	i = 0;
-	while (i < d->nbr_philo)
-	{
-		d->philos[i].d = d;
-		d->philos[i].id = i;
-		d->philos[i].last_eat = d->time;
-		d->philos[i].limit_eat = d->time + d->t_die;
-		d->philos[i].nbr_eat = 0;
-		d->philos[i].l_fork = &d->forks[i];
-		d->philos[i].r_fork = &d->forks[(i + 1) % d->nbr_philo];
-		pthread_create(&d->philos[i].thread, NULL, philosopher, &d->philos[i]);
-		i++;
-		usleep(10);
-	}
-}
-
 void init1(int argc, char const *argv[], t_data *d)
 {
 	int	i;
@@ -125,13 +105,25 @@ int	main(int argc, char const *argv[])
 	int		i;
 
 	init1(argc, argv, &d);
-	start_philos(&d);
-	pthread_create(&d.monitor, NULL, monitor, &d); //
+	i = -1;
+	while (++i < d.nbr_philo)
+	{
+		d.philos[i].d = &d;
+		d.philos[i].id = i;
+		d.philos[i].last_eat = d.time;
+		d.philos[i].limit_eat = d.time + d.t_die;
+		d.philos[i].nbr_eat = 0;
+		d.philos[i].l_fork = &d.forks[i];
+		d.philos[i].r_fork = &d.forks[(i + 1) % d.nbr_philo];
+		pthread_create(&d.philos[i].thread, NULL, philosopher, &d.philos[i]);
+		usleep(10);
+	}
+	pthread_create(&d.monitor, NULL, monitor, &d);
 	pthread_join(d.monitor, NULL);
 	i = -1;
 	while (++i < d.nbr_philo)
 		pthread_detach(d.philos[i].thread);
 	while (++i < d.nbr_philo)
-		pthread_mutex_destroy(&d.forks[i]); //
+		pthread_mutex_destroy(&d.forks[i]);
 	return (0);
 }
