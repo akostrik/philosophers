@@ -30,7 +30,7 @@ typedef struct s_data
 	t_philo			philos[200];
 	long long		t_start;
 	int				eat_count;
-	int				good;
+	int				we_should_continue;
 	pthread_mutex_t	i_take_fork[200];
 	pthread_mutex_t	m_good;
 	pthread_mutex_t	m_eat_count;

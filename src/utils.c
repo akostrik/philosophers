@@ -68,7 +68,7 @@ void	ft_usleep(t_data *d, int stop_ms)
 	while (get_time() < end_ms)
 	{
 		pthread_mutex_lock(&d->m_good);
-		if (d->good != 1)
+		if (d->we_should_continue == 0)
 		{
 			pthread_mutex_unlock(&d->m_good);
 			return ;
@@ -81,7 +81,7 @@ void	ft_usleep(t_data *d, int stop_ms)
 int	check_good(t_data *d)
 {
 	pthread_mutex_lock(&d->m_good);
-	if (!d->good)
+	if (d->we_should_continue == 0)
 	{
 		pthread_mutex_unlock(&d->m_good);
 		return (1);

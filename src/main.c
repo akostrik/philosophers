@@ -2,6 +2,27 @@
 
 #include "philo.h"
 
+void	philo_eat(t_philo *philo)
+{
+	pthread_mutex_lock(philo->l_fork);
+	print_message(philo, "has taken a fork");
+	pthread_mutex_lock(philo->r_fork);
+	print_message(philo, "has taken a fork");
+	print_message(philo, "is eating");
+	philo->last_eat = get_time();
+	philo->limit_eat = philo->last_eat + philo->d->t_die;
+	ft_usleep(philo->d, philo->d->t_eat);
+	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
+	if (philo->d->nbrEat != -1)
+	{
+		pthread_mutex_lock(&philo->d->m_eat_count);
+		philo->nbr_eat += 1;
+		philo->d->eat_count += 1;
+		pthread_mutex_unlock(&philo->d->m_eat_count);
+	}
+}
+
 void	*thread_philo(void *philo0)
 {
 	t_philo	*philo;
@@ -39,7 +60,7 @@ void init1(int argc, char const *argv[], t_data *d)
 		d->nbrEat = ft_atoi(argv[5]);
 	if (d->nbr_philo <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nbrEat != -1))
 		exit_("Error inputs");
-	d->good = 1;
+	d->we_should_continue = 1;
 	d->eat_count = 0;
 	pthread_mutex_init(&d->i_take_printer, NULL);
 	i = -1;
@@ -72,20 +93,20 @@ int	main(int argc, char const *argv[])
 	i = -1;
 	while (1)
 	{
-		pthread_mutex_lock(&d.m_eat_count);
-		if (d.eat_count >= d.nbr_philo * d.nbrEat && d.nbrEat != -1)
-		{
-			pthread_mutex_lock(&d.m_good);
-			d.good = 0;
-			pthread_mutex_unlock(&d.m_good);
-			pthread_mutex_unlock(&d.m_eat_count);
-			break ;
-		}
-		pthread_mutex_unlock(&d.m_eat_count);
+		// pthread_mutex_lock(&d.m_eat_count);
+		// if (d.eat_count >= d.nbr_philo * d.nbrEat && d.nbrEat != -1)
+		// {
+		// 	pthread_mutex_lock(&d.m_good);
+		// 	d.we_should_continue = 0;
+		// 	pthread_mutex_unlock(&d.m_good);
+		// 	pthread_mutex_unlock(&d.m_eat_count);
+		// 	break ;
+		// }
+		// pthread_mutex_unlock(&d.m_eat_count);
 		if (get_time() > d.philos[i].limit_eat)
 		{
 			pthread_mutex_lock(&d.m_good);
-			d.good = 0;
+			d.we_should_continue = 0;
 			pthread_mutex_unlock(&d.m_good);
 			pthread_mutex_lock(&d.i_take_printer);
 			printf("%lld %d died\n", get_time() - d.t_start, i + 1);

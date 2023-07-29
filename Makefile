@@ -1,4 +1,4 @@
-SRC  =	main.c utils.c utils2.c philo_action.c
+SRC  =	main.c utils.c utils2.c
 OBJ  = $(SRC:.c=.o)
 OBJ := $(addprefix ./objs/, $(OBJ))
 CC   = clang -pthread -Wall -Wextra -Werror
