@@ -49,12 +49,12 @@ int			ft_strlen(const char *str);
 int			ft_atoi(const char *str);
 int			check_good(t_data *d);
 long long	get_time(void);
-void		*philosopher(void *arg);
 void		start_philos(t_data *d);
 void		ft_usleep(t_data *d, int stop_ms);
 void		ft_putnbr_fd(int n, int fd);
 void		print_message(t_philo *philo, char *str);
 void		philo_eat(t_philo *philo);
 void		exit_(char *str);
+void		print_message(t_philo *philo, char *str);
 
 #endif

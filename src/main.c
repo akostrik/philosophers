@@ -73,6 +73,26 @@ void	*philosopher(void *arg)
 	}
 }
 
+void	start_philos(t_data *d)
+{
+	int	i;
+
+	i = 0;
+	while (i < d->nbr_philo)
+	{
+		d->philos[i].d = d;
+		d->philos[i].id = i;
+		d->philos[i].last_eat = d->time;
+		d->philos[i].limit_eat = d->time + d->t_die;
+		d->philos[i].nbr_eat = 0;
+		d->philos[i].l_fork = &d->forks[i];
+		d->philos[i].r_fork = &d->forks[(i + 1) % d->nbr_philo];
+		pthread_create(&d->philos[i].thread, NULL, philosopher, &d->philos[i]);
+		i++;
+		usleep(10);
+	}
+}
+
 int	create_philo(t_data *d)
 {
 	int	i;
