@@ -5,7 +5,7 @@
 int	check_health(t_data *d)
 {
 	pthread_mutex_lock(&d->i_take_dairy_of_health);
-	if (d->we_should_continue == 0)
+	if (d->everyone_is_healthy == 0)
 	{
 		pthread_mutex_unlock(&d->i_take_dairy_of_health);
 		return (1);
@@ -67,7 +67,7 @@ void init1(int argc, char const *argv[], t_data *d)
 	// 	d->nbr_meals_max = ft_atoi(argv[5]);
 	// if (d->nbr_philo <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nbr_meals_max != -1))
 	// 	exit_("Error inputs");
-	d->we_should_continue = 1;
+	d->everyone_is_healthy = 1;
 	// d->eat_count = 0;
 	pthread_mutex_init(&d->i_take_printer, NULL);
 	pthread_mutex_init(&d->i_take_dairy_of_health, NULL);
@@ -103,7 +103,7 @@ int	main(int argc, char const *argv[])
 		// if (d.eat_count >= d.nbr_philo * d.nbr_meals_max && d.nbr_meals_max != -1)
 		// {
 		// 	pthread_mutex_lock(&d.i_take_dairy_of_health);
-		// 	d.we_should_continue = 0;
+		// 	d.everyone_is_healthy = 0;
 		// 	pthread_mutex_unlock(&d.i_take_dairy_of_health);
 		// 	pthread_mutex_unlock(&d.m_eat_count);
 		// 	break ;
@@ -112,7 +112,7 @@ int	main(int argc, char const *argv[])
 		if (get_time() > d.philos[i].t_next_meal)
 		{
 			pthread_mutex_lock(&d.i_take_dairy_of_health);
-			d.we_should_continue = 0;
+			d.everyone_is_healthy = 0;
 			pthread_mutex_unlock(&d.i_take_dairy_of_health);
 			pthread_mutex_lock(&d.i_take_printer);
 			printf("%lld %d died\n", get_time() - d.t_start, i + 1);

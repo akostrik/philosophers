@@ -68,7 +68,7 @@ void	sleep_as_long_as_everyone_is_healthy(t_data *d, int stop_ms)
 	while (get_time() < end_ms)
 	{
 		pthread_mutex_lock(&d->i_take_dairy_of_health);
-		if (d->we_should_continue == 0)
+		if (d->everyone_is_healthy == 0)
 		{
 			pthread_mutex_unlock(&d->i_take_dairy_of_health);
 			return ;

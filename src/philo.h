@@ -28,7 +28,7 @@ typedef struct s_data
 	int				t_slp;
 	long long		t_start;
 	t_philo			philos[200];
-	int				we_should_continue;
+	int				everyone_is_healthy;
 	pthread_mutex_t	i_take_fork[200];
 	pthread_mutex_t	i_take_dairy_of_health;
 	pthread_mutex_t	i_take_printer;
