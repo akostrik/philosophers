@@ -67,13 +67,13 @@ void	ft_usleep(t_data *d, int stop_ms)
 	end_ms = get_time() + stop_ms;
 	while (get_time() < end_ms)
 	{
-		pthread_mutex_lock(&d->m_we_should_continue);
+		pthread_mutex_lock(&d->i_take_dairy_of_health);
 		if (d->we_should_continue == 0)
 		{
-			pthread_mutex_unlock(&d->m_we_should_continue);
+			pthread_mutex_unlock(&d->i_take_dairy_of_health);
 			return ;
 		}
-		pthread_mutex_unlock(&d->m_we_should_continue);
+		pthread_mutex_unlock(&d->i_take_dairy_of_health);
 		usleep(100);
 	}
 }

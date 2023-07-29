@@ -2,15 +2,15 @@
 
 #include "philo.h"
 
-int	check_good(t_data *d)
+int	check_health(t_data *d)
 {
-	pthread_mutex_lock(&d->m_we_should_continue);
+	pthread_mutex_lock(&d->i_take_dairy_of_health);
 	if (d->we_should_continue == 0)
 	{
-		pthread_mutex_unlock(&d->m_we_should_continue);
+		pthread_mutex_unlock(&d->i_take_dairy_of_health);
 		return (1);
 	}
-	pthread_mutex_unlock(&d->m_we_should_continue);
+	pthread_mutex_unlock(&d->i_take_dairy_of_health);
 	return (0);
 }
 
@@ -23,7 +23,7 @@ void	*thread_philo(void *philo0)
 	{
 		// if (philo->d->nbr_meals_max != -1 && philo->nbr_meals == philo->d->nbr_meals_max)
 		// 	return (NULL);
-		if (check_good(philo->d))
+		if (check_health(philo->d))
 			return (NULL);
 		pthread_mutex_lock(&(philo->d->i_take_fork[philo->id]));
 		print_message(philo, "has taken a fork");
@@ -42,11 +42,11 @@ void	*thread_philo(void *philo0)
 		// 	philo->d->eat_count += 1;
 		// 	pthread_mutex_unlock(&philo->d->m_eat_count);
 		// }
-		if (check_good(philo->d))
+		if (check_health(philo->d))
 			return (NULL);
 		print_message(philo, "is sleeping");
 		ft_usleep(philo->d, philo->d->t_slp);
-		if (check_good(philo->d))
+		if (check_health(philo->d))
 			return (NULL);
 		print_message(philo, "is thinking");
 	}
@@ -70,7 +70,7 @@ void init1(int argc, char const *argv[], t_data *d)
 	d->we_should_continue = 1;
 	// d->eat_count = 0;
 	pthread_mutex_init(&d->i_take_printer, NULL);
-	pthread_mutex_init(&d->m_we_should_continue, NULL);
+	pthread_mutex_init(&d->i_take_dairy_of_health, NULL);
 	// pthread_mutex_init(&d->m_eat_count, NULL);
 	i = -1;
 	while (++i < d->nbr_philo)
@@ -102,18 +102,18 @@ int	main(int argc, char const *argv[])
 		// pthread_mutex_lock(&d.m_eat_count);
 		// if (d.eat_count >= d.nbr_philo * d.nbr_meals_max && d.nbr_meals_max != -1)
 		// {
-		// 	pthread_mutex_lock(&d.m_we_should_continue);
+		// 	pthread_mutex_lock(&d.i_take_dairy_of_health);
 		// 	d.we_should_continue = 0;
-		// 	pthread_mutex_unlock(&d.m_we_should_continue);
+		// 	pthread_mutex_unlock(&d.i_take_dairy_of_health);
 		// 	pthread_mutex_unlock(&d.m_eat_count);
 		// 	break ;
 		// }
 		// pthread_mutex_unlock(&d.m_eat_count);
 		if (get_time() > d.philos[i].t_next_meal)
 		{
-			pthread_mutex_lock(&d.m_we_should_continue);
+			pthread_mutex_lock(&d.i_take_dairy_of_health);
 			d.we_should_continue = 0;
-			pthread_mutex_unlock(&d.m_we_should_continue);
+			pthread_mutex_unlock(&d.i_take_dairy_of_health);
 			pthread_mutex_lock(&d.i_take_printer);
 			printf("%lld %d died\n", get_time() - d.t_start, i + 1);
 			pthread_mutex_unlock(&d.i_take_printer);

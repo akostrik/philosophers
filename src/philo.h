@@ -30,7 +30,7 @@ typedef struct s_data
 	t_philo			philos[200];
 	int				we_should_continue;
 	pthread_mutex_t	i_take_fork[200];
-	pthread_mutex_t	m_we_should_continue;
+	pthread_mutex_t	i_take_dairy_of_health;
 	pthread_mutex_t	i_take_printer;
 
 	// int				eat_count;
@@ -40,14 +40,10 @@ typedef struct s_data
 
 int			ft_strlen(const char *str);
 int			ft_atoi(const char *str);
-int			check_good(t_data *d);
-long long	get_time(void);
-void		start_philos(t_data *d);
-void		ft_usleep(t_data *d, int stop_ms);
 void		ft_putnbr_fd(int n, int fd);
+long long	get_time(void);
+void		ft_usleep(t_data *d, int stop_ms);
 void		print_message(t_philo *philo, char *str);
-void		philo_eat(t_philo *philo);
 void		exit_(char *str);
-void		print_message(t_philo *philo, char *str);
 
 #endif
