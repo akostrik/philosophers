@@ -93,8 +93,7 @@ int	main(int argc, char const *argv[])
 			return (1);
 		}
 		i = (i + 1) % d.nbr_philo;
-		if (i == 0)
-			usleep(100);
+		usleep(10);
 	}
 	i = -1;
 	while (++i < d.nbr_philo)
