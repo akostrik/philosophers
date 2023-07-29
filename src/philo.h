@@ -29,14 +29,14 @@ typedef struct s_data
 	int				nbrEat;
 	t_philo			philos[200];
 	pthread_mutex_t	forks[200];
-	long long		time;
+	long long		t_start;
 	pthread_t		monitor;
 	int				eat_count;
 	pthread_mutex_t	m_eat_count;
 	int				good;
 	pthread_mutex_t	m_good;
 	pthread_mutex_t	m_dead;
-	pthread_mutex_t	m_print;
+	pthread_mutex_t	i_take_printer;
 }	t_data;
 
 typedef struct s_args
