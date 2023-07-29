@@ -30,7 +30,6 @@ void	start_half(t_data *d, int i)
 		d->philos[i].limit_eat = d->time + d->t_die;
 		d->philos[i].nbr_eat = 0;
 		find_forks(d, i);
-		pthread_mutex_init(&d->philos[i].m_eating, NULL);
 		pthread_create(&d->philos[i].thread, NULL, philosopher,
 			&d->philos[i]);
 		i += 2;
@@ -43,11 +42,9 @@ void	philo_eat(t_philo *philo)
 	print_message(philo, "has taken a fork");
 	pthread_mutex_lock(philo->r_fork);
 	print_message(philo, "has taken a fork");
-	pthread_mutex_lock(&philo->m_eating);
 	print_message(philo, "is eating");
 	philo->last_eat = get_time();
 	philo->limit_eat = philo->last_eat + philo->d->t_die;
-	pthread_mutex_unlock(&philo->m_eating);
 	ft_usleep(philo->d, philo->d->t_eat);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);

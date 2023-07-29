@@ -43,13 +43,8 @@ void	*monitor(void *arg)
 		i = -1;
 		while (++i < d->nbr_philo)
 		{
-			pthread_mutex_lock(&d->philos[i].m_eating);
 			if (monitor_life(d, i) || monitor_count_meals(d))
-			{
-				pthread_mutex_unlock(&d->philos[i].m_eating);
 				return (NULL);
-			}
-			pthread_mutex_unlock(&d->philos[i].m_eating);
 		}
 		usleep(100);
 	}

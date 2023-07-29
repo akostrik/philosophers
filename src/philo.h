@@ -15,7 +15,6 @@ typedef struct s_philo
 	long long		last_eat;
 	long long		limit_eat;
 	int				nbr_eat;
-	pthread_mutex_t	m_eating;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	struct s_data	*d;
@@ -28,13 +27,13 @@ typedef struct s_data
 	int				t_eat;
 	int				t_slp;
 	int				nbrEat;
-	int				good;
-	int				eat_count;
 	t_philo			philos[200];
 	pthread_mutex_t	forks[200];
 	long long		time;
 	pthread_t		monitor;
+	int				eat_count;
 	pthread_mutex_t	m_eat_count;
+	int				good;
 	pthread_mutex_t	m_good;
 	pthread_mutex_t	m_dead;
 	pthread_mutex_t	m_print;
