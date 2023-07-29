@@ -2,25 +2,16 @@
 
 #include "philo.h"
 
-void	philo_eat(t_philo *philo)
+int	check_good(t_data *d)
 {
-	pthread_mutex_lock(philo->l_fork);
-	print_message(philo, "has taken a fork");
-	pthread_mutex_lock(philo->r_fork);
-	print_message(philo, "has taken a fork");
-	print_message(philo, "is eating");
-	philo->t_last_meal = get_time();
-	philo->t_next_meal = philo->t_last_meal + philo->d->t_die;
-	ft_usleep(philo->d, philo->d->t_eat);
-	pthread_mutex_unlock(philo->r_fork);
-	pthread_mutex_unlock(philo->l_fork);
-	// if (philo->d->nbr_meals_max != -1)
-	// {
-	// 	pthread_mutex_lock(&philo->d->m_eat_count);
-	// 	philo->nbr_eat += 1;
-	// 	philo->d->eat_count += 1;
-	// 	pthread_mutex_unlock(&philo->d->m_eat_count);
-	// }
+	pthread_mutex_lock(&d->m_good);
+	if (d->we_should_continue == 0)
+	{
+		pthread_mutex_unlock(&d->m_good);
+		return (1);
+	}
+	pthread_mutex_unlock(&d->m_good);
+	return (0);
 }
 
 void	*thread_philo(void *philo0)
@@ -34,7 +25,23 @@ void	*thread_philo(void *philo0)
 			return (NULL);
 		if (check_good(philo->d))
 			return (NULL);
-		philo_eat(philo);
+		pthread_mutex_lock(philo->l_fork);
+		print_message(philo, "has taken a fork");
+		pthread_mutex_lock(philo->r_fork);
+		print_message(philo, "has taken a fork");
+		print_message(philo, "is eating");
+		philo->t_last_meal = get_time();
+		philo->t_next_meal = philo->t_last_meal + philo->d->t_die;
+		ft_usleep(philo->d, philo->d->t_eat);
+		pthread_mutex_unlock(philo->r_fork);
+		pthread_mutex_unlock(philo->l_fork);
+		// if (philo->d->nbr_meals_max != -1)
+		// {
+		// 	pthread_mutex_lock(&philo->d->m_eat_count);
+		// 	philo->nbr_eat += 1;
+		// 	philo->d->eat_count += 1;
+		// 	pthread_mutex_unlock(&philo->d->m_eat_count);
+		// }
 		if (check_good(philo->d))
 			return (NULL);
 		print_message(philo, "is sleeping");

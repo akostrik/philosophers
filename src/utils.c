@@ -78,14 +78,3 @@ void	ft_usleep(t_data *d, int stop_ms)
 	}
 }
 
-int	check_good(t_data *d)
-{
-	pthread_mutex_lock(&d->m_good);
-	if (d->we_should_continue == 0)
-	{
-		pthread_mutex_unlock(&d->m_good);
-		return (1);
-	}
-	pthread_mutex_unlock(&d->m_good);
-	return (0);
-}
