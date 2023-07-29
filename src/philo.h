@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nsimon <nsimon@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/17 10:21:47 by nsimon            #+#    #+#             */
-/*   Updated: 2021/08/03 01:30:20 by nsimon           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -54,17 +42,17 @@ typedef struct s_main
 
 typedef struct s_args
 {
-	t_data	*status;
+	t_data	*d;
 	t_philo	*philo;
 }	t_args;
 
 int			ft_strlen(const char *str);
 int			ft_atoi(const char *str);
-int			check_good(t_data *status);
+int			check_good(t_data *d);
 long long	get_time(void);
 void		*philosopher(void *arg);
-void		start_half(t_data *status, int i);
-void		ft_usleep(t_data *status, int stop_ms);
+void		start_half(t_data *d, int i);
+void		ft_usleep(t_data *d, int stop_ms);
 void		ft_putnbr_fd(int n, int fd);
 void		print_message(t_philo *philo, char *str);
 void		philo_eat(t_philo *philo);

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nsimon <nsimon@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/17 10:21:04 by nsimon            #+#    #+#             */
-/*   Updated: 2021/08/03 00:58:15 by nsimon           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 int	ft_strlen(const char *str)
@@ -72,20 +60,20 @@ long long	get_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	ft_usleep(t_data *status, int stop_ms)
+void	ft_usleep(t_data *d, int stop_ms)
 {
 	long long	end_ms;
 
 	end_ms = get_time() + stop_ms;
 	while (get_time() < end_ms)
 	{
-		pthread_mutex_lock(&status->m_good);
-		if (status->good != 1)
+		pthread_mutex_lock(&d->m_good);
+		if (d->good != 1)
 		{
-			pthread_mutex_unlock(&status->m_good);
+			pthread_mutex_unlock(&d->m_good);
 			return ;
 		}
-		pthread_mutex_unlock(&status->m_good);
+		pthread_mutex_unlock(&d->m_good);
 		usleep(100);
 	}
 }

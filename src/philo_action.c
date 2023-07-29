@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo_action.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nsimon <nsimon@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/03 02:01:23 by nsimon            #+#    #+#             */
-/*   Updated: 2021/08/03 01:02:09 by nsimon           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 void	print_message(t_philo *philo, char *str)
@@ -23,28 +11,28 @@ void	print_message(t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->d->m_print);
 }
 
-void	find_forks(t_data *status, int id)
+void	find_forks(t_data *d, int id)
 {
-	status->philos[id].l_fork = &status->forks[id];
-	if (id + 1 >= status->nbr_philo)
-		status->philos[id].r_fork = &status->forks[0];
+	d->philos[id].l_fork = &d->forks[id];
+	if (id + 1 >= d->nbr_philo)
+		d->philos[id].r_fork = &d->forks[0];
 	else
-		status->philos[id].r_fork = &status->forks[id + 1];
+		d->philos[id].r_fork = &d->forks[id + 1];
 }
 
-void	start_half(t_data *status, int i)
+void	start_half(t_data *d, int i)
 {
-	while (i < status->nbr_philo)
+	while (i < d->nbr_philo)
 	{
-		status->philos[i].d = status;
-		status->philos[i].id = i;
-		status->philos[i].last_eat = status->time;
-		status->philos[i].limit_eat = status->time + status->timeToDie;
-		status->philos[i].nbr_eat = 0;
-		find_forks(status, i);
-		pthread_mutex_init(&status->philos[i].m_eating, NULL);
-		pthread_create(&status->philos[i].thread, NULL, philosopher,
-			&status->philos[i]);
+		d->philos[i].d = d;
+		d->philos[i].id = i;
+		d->philos[i].last_eat = d->time;
+		d->philos[i].limit_eat = d->time + d->timeToDie;
+		d->philos[i].nbr_eat = 0;
+		find_forks(d, i);
+		pthread_mutex_init(&d->philos[i].m_eating, NULL);
+		pthread_create(&d->philos[i].thread, NULL, philosopher,
+			&d->philos[i]);
 		i += 2;
 	}
 }
