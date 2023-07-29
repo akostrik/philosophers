@@ -9,18 +9,18 @@ void	philo_eat(t_philo *philo)
 	pthread_mutex_lock(philo->r_fork);
 	print_message(philo, "has taken a fork");
 	print_message(philo, "is eating");
-	philo->last_eat = get_time();
-	philo->limit_eat = philo->last_eat + philo->d->t_die;
+	philo->t_last_meal = get_time();
+	philo->t_next_meal = philo->t_last_meal + philo->d->t_die;
 	ft_usleep(philo->d, philo->d->t_eat);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
-	if (philo->d->nbrEat != -1)
-	{
-		pthread_mutex_lock(&philo->d->m_eat_count);
-		philo->nbr_eat += 1;
-		philo->d->eat_count += 1;
-		pthread_mutex_unlock(&philo->d->m_eat_count);
-	}
+	// if (philo->d->nbrEat != -1)
+	// {
+	// 	pthread_mutex_lock(&philo->d->m_eat_count);
+	// 	philo->nbr_eat += 1;
+	// 	philo->d->eat_count += 1;
+	// 	pthread_mutex_unlock(&philo->d->m_eat_count);
+	// }
 }
 
 void	*thread_philo(void *philo0)
@@ -67,7 +67,7 @@ void init1(int argc, char const *argv[], t_data *d)
 	while (++i < d->nbr_philo)
 		pthread_mutex_init(&d->i_take_fork[i], NULL);
 	pthread_mutex_init(&d->m_good, NULL);
-	pthread_mutex_init(&d->m_eat_count, NULL);
+	// pthread_mutex_init(&d->m_eat_count, NULL);
 	d->t_start = get_time();
 }
 
@@ -82,8 +82,8 @@ int	main(int argc, char const *argv[])
 	{
 		d.philos[i].d = &d;
 		d.philos[i].id = i;
-		d.philos[i].last_eat = d.t_start;
-		d.philos[i].limit_eat = d.t_start + d.t_die;
+		d.philos[i].t_last_meal = d.t_start;
+		d.philos[i].t_next_meal = d.t_start + d.t_die;
 		d.philos[i].nbr_eat = 0;
 		d.philos[i].l_fork = &d.i_take_fork[i];
 		d.philos[i].r_fork = &d.i_take_fork[(i + 1) % d.nbr_philo];
@@ -103,7 +103,7 @@ int	main(int argc, char const *argv[])
 		// 	break ;
 		// }
 		// pthread_mutex_unlock(&d.m_eat_count);
-		if (get_time() > d.philos[i].limit_eat)
+		if (get_time() > d.philos[i].t_next_meal)
 		{
 			pthread_mutex_lock(&d.m_good);
 			d.we_should_continue = 0;

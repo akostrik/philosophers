@@ -12,8 +12,8 @@ typedef struct s_philo
 {
 	int				id;
 	pthread_t		thread;
-	long long		last_eat;
-	long long		limit_eat;
+	long long		t_last_meal;
+	long long		t_next_meal;
 	int				nbr_eat;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
@@ -33,15 +33,9 @@ typedef struct s_data
 	int				we_should_continue;
 	pthread_mutex_t	i_take_fork[200];
 	pthread_mutex_t	m_good;
-	pthread_mutex_t	m_eat_count;
+	// pthread_mutex_t	m_eat_count;
 	pthread_mutex_t	i_take_printer;
 }	t_data;
-
-typedef struct s_args
-{
-	t_data	*d;
-	t_philo	*philo;
-}	t_args;
 
 int			ft_strlen(const char *str);
 int			ft_atoi(const char *str);
