@@ -50,11 +50,11 @@ void	*monitor(void *arg)
 	}
 }
 
-void	*philosopher(void *arg)
+void	*philosopher(void *philo0)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)arg;
+	philo = (t_philo *)philo0;
 	while (1)
 	{
 		if (philo->d->nbrEat != -1
@@ -93,31 +93,10 @@ void	start_philos(t_data *d)
 	}
 }
 
-int	create_philo(t_data *d)
+void init1(int argc, char const *argv[], t_data *d)
 {
 	int	i;
 
-	d->eat_count = 0;
-	pthread_mutex_init(&d->m_print, NULL);
-	i = -1;
-	while (++i < d->nbr_philo)
-		pthread_mutex_init(&d->forks[i], NULL);
-	pthread_mutex_init(&d->m_good, NULL);
-	pthread_mutex_init(&d->m_eat_count, NULL);
-	d->time = get_time();
-	start_philos(d);
-	pthread_create(&d->monitor, NULL, monitor, d);
-	pthread_join(d->monitor, NULL);
-	i = -1;
-	while (++i < d->nbr_philo)
-		pthread_detach(d->philos[i].thread);
-	while (++i < d->nbr_philo)
-		pthread_mutex_destroy(&d->forks[i]);
-	return (0);
-}
-
-void init1(int argc, char const *argv[], t_data *d)
-{
 	if (argc <= 4 || argc >= 6)
 		exit_("Error inputs");
 	d->nbr_philo = ft_atoi(argv[1]);
@@ -130,13 +109,29 @@ void init1(int argc, char const *argv[], t_data *d)
 	if (d->nbr_philo <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nbrEat != -1))
 		exit_("Error inputs");
 	d->good = 1;
+	d->eat_count = 0;
+	pthread_mutex_init(&d->m_print, NULL);
+	i = -1;
+	while (++i < d->nbr_philo)
+		pthread_mutex_init(&d->forks[i], NULL);
+	pthread_mutex_init(&d->m_good, NULL);
+	pthread_mutex_init(&d->m_eat_count, NULL);
+	d->time = get_time();
 }
 
 int	main(int argc, char const *argv[])
 {
 	t_data	d;
+	int		i;
 
 	init1(argc, argv, &d);
-	create_philo(&d);
+	start_philos(&d);
+	pthread_create(&d.monitor, NULL, monitor, &d); //
+	pthread_join(d.monitor, NULL);
+	i = -1;
+	while (++i < d.nbr_philo)
+		pthread_detach(d.philos[i].thread);
+	while (++i < d.nbr_philo)
+		pthread_mutex_destroy(&d.forks[i]); //
 	return (0);
 }
