@@ -113,7 +113,7 @@ int	main(int argc, char const *argv[])
 			pthread_mutex_lock(&d.i_take_printer);
 			printf("%lld %d died\n", get_time() - d.t_start, i + 1);
 			pthread_mutex_unlock(&d.i_take_printer);
-			return (1);
+			break ; //return (1);
 		}
 		i = (i + 1) % d.nbr_philo;
 		usleep(10);
