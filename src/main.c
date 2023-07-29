@@ -38,27 +38,25 @@ void	*monitor(void *arg)
 	int			i;
 
 	d = (t_data *)arg;
+	i = -1;
 	while (1)
 	{
-		i = -1;
-		while (++i < d->nbr_philo)
-		{
-			if (monitor_life(d, i) || monitor_count_meals(d))
-				return (NULL);
-		}
-		usleep(100);
+		if (monitor_life(d, i) || monitor_count_meals(d))
+			return (NULL);
+		i = (i + 1) % d->nbr_philo;
+		if (i == 0)
+			usleep(100);
 	}
 }
 
-void	*philosopher(void *philo0)
+void	*thread_philo(void *philo0)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)philo0;
 	while (1)
 	{
-		if (philo->d->nbrEat != -1
-			&& philo->nbr_eat == philo->d->nbrEat)
+		if (philo->d->nbrEat != -1 && philo->nbr_eat == philo->d->nbrEat)
 			return (NULL);
 		if (check_good(philo->d))
 			return (NULL);
@@ -115,7 +113,7 @@ int	main(int argc, char const *argv[])
 		d.philos[i].nbr_eat = 0;
 		d.philos[i].l_fork = &d.forks[i];
 		d.philos[i].r_fork = &d.forks[(i + 1) % d.nbr_philo];
-		pthread_create(&d.philos[i].thread, NULL, philosopher, &d.philos[i]);
+		pthread_create(&d.philos[i].thread, NULL, thread_philo, &d.philos[i]);
 		usleep(10);
 	}
 	pthread_create(&d.monitor, NULL, monitor, &d);
