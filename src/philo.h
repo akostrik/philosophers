@@ -1,46 +1,73 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nsimon <nsimon@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/17 10:21:47 by nsimon            #+#    #+#             */
+/*   Updated: 2021/08/03 01:30:20 by nsimon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <sys/time.h>
+# include <stdio.h>
 # include <pthread.h>
+# include <sys/time.h>
+# include <unistd.h>
 
-struct s_data;
 
-// ph = philosopher
-// phs = philosophers
-typedef	struct			s_ph
+typedef struct s_philo
 {
-	int					id;
-	int					nb_meals;
-	long long			t_last_meal;
-	struct s_data		*d;
-	pthread_t			thread_id;
-}						t_ph;
+	int				id;
+	pthread_t		thread;
+	long long		last_eat;
+	long long		limit_eat;
+	int				nbr_eat;
+	pthread_mutex_t	m_eating;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*r_fork;
+	struct s_main	*d;
+}	t_philo;
 
-typedef struct			s_data
+typedef struct s_main
 {
-	int					nb_phs;
-	int					t_death;
-	int					t_eat;
-	int					t_sleep;
-	int					nb_meals_max;
-	int					evrybody_is_alive;
-	int					everybody_has_got_nb_meals_max;
-	long long			first_timestamp;
-	pthread_mutex_t		check_if_should_stop;
-	pthread_mutex_t		forks[200];
-	pthread_mutex_t		writing;
-	t_ph				phs[200];
-}						t_data;
+	int				nbr_philo;
+	int				timeToDie;
+	int				timeToEat;
+	int				timeToSleep;
+	int				nbrEat;
+	int				good;
+	int				eat_count;
+	pthread_mutex_t	m_eat_count;
+	pthread_mutex_t	m_good;
+	long long		time;
+	t_philo			*philos;
+	pthread_t		monitor;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	m_print;
+	pthread_mutex_t	m_dead;
+}	t_main;
 
-int						ft_atoi(const char *str);
-void					print_action(t_data *d, int id, char *string);
-long long				timestamp(void);
-void					sleep_(long long time, t_data *d);
-void					exit_(char *str);
+typedef struct s_args
+{
+	t_main	*status;
+	t_philo	*philo;
+}	t_args;
+
+int			ft_strlen(const char *str);
+int			ft_atoi(const char *str);
+int			check_good(t_main *status);
+long long	get_time(void);
+void		*philosopher(void *arg);
+void		start_half(t_main *status, int i);
+void		ft_usleep(t_main *status, int stop_ms);
+void		ft_putnbr_fd(int n, int fd);
+void		print_message(t_philo *philo, char *str);
+void		philo_eat(t_philo *philo);
+void		*monitor(void *arg);
 
 #endif

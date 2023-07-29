@@ -1,128 +1,102 @@
+
 #include "philo.h"
 
-// при одним философе не выходит
+void	*philosopher(void *arg)
+{
+	t_philo	*philo;
 
-// pthread_mutex_init attr = NULL - the default mutex attributes
-static void	init_phs(t_data *d)
+	philo = (t_philo *)arg;
+	while (1)
+	{
+		if (philo->d->nbrEat != -1
+			&& philo->nbr_eat == philo->d->nbrEat)
+			return (NULL);
+		if (check_good(philo->d))
+			return (NULL);
+		philo_eat(philo);
+		if (check_good(philo->d))
+			return (NULL);
+		print_message(philo, "is sleeping");
+		ft_usleep(philo->d, philo->d->timeToSleep);
+		if (check_good(philo->d))
+			return (NULL);
+		print_message(philo, "is thinking");
+	}
+}
+
+void	ft_clear(t_main *d)
 {
 	int	i;
 
 	i = -1;
-	while (++i < d->nb_phs)
-	{
-		d->phs[i].id = i;
-		d->phs[i].nb_meals = 0;
-		d->phs[i].t_last_meal = 0;
-		d->phs[i].d = d; /// ?
-		if (pthread_mutex_init(&(d->forks[i]), NULL))
-			exit_("Intializing mutex");
-	}
+	while (++i < d->nbr_philo)
+		pthread_detach(d->philos[i].thread);
+	free(d->philos);
+	while (++i < d->nbr_philo)
+		pthread_mutex_destroy(&d->forks[i]);
+	free(d->forks);
 }
 
-static void	*ph_thread(void *ph0)
-{
-	t_ph	*ph;
-
-	ph = (t_ph *)ph0;
-	if (ph->id % 2)
-		usleep(15000); // связано с t_eat ...
-	while (ph->d->evrybody_is_alive == 1)
-	{
-		if (ph->d->everybody_has_got_nb_meals_max == 1)
-			break ;
-		pthread_mutex_lock(&((ph->d)->forks[ph->id]));
-		print_action(ph->d, ph->id, "has taken a fork");
-		pthread_mutex_lock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
-		print_action(ph->d, ph->id, "has taken a fork");
-		pthread_mutex_lock(&((ph->d)->check_if_should_stop));
-		print_action(ph->d, ph->id, "is eating *****");
-		ph->t_last_meal = timestamp();
-		pthread_mutex_unlock(&((ph->d)->check_if_should_stop));
-		sleep_(ph->d->t_eat, ph->d);
-		(ph->nb_meals)++;
-		pthread_mutex_unlock(&((ph->d)->forks[ph->id]));
-		pthread_mutex_unlock(&((ph->d)->forks[(ph->id + 1) % ph->d->nb_phs]));
-		if (ph->d->everybody_has_got_nb_meals_max == 1)
-			break ;
-		print_action(ph->d, ph->id, "is sleeping");
-		sleep_(ph->d->t_sleep, ph->d);
-		print_action(ph->d, ph->id, "is thinking");
-	}
-	return (NULL);
-}
-
-static void	sleep_as_lons_as_everyone_is_alive(t_data *d)
-{
-	int i;
-
-	i = 0;
-	while (d->evrybody_is_alive == 1)
-	{
-		if (i == 0)
-			d->everybody_has_got_nb_meals_max = 1;
-		pthread_mutex_lock(&(d->check_if_should_stop));
-		if (timestamp() - d->phs[i].t_last_meal > d->t_death)
-		{
-			print_action(d, i, "died");
-			d->evrybody_is_alive = 0;
-		}
-		if (d->nb_meals_max != -1 && d->phs[i].nb_meals < d->nb_meals_max)
-			d->everybody_has_got_nb_meals_max = 0;
-		pthread_mutex_unlock(&(d->check_if_should_stop));
-		if (i == d->nb_phs - 1 && d->everybody_has_got_nb_meals_max == 1)
-			break ;
-		i = (i + 1) % d->nb_phs;
-		usleep(100);
-	}
-}
-
-// stores ID of  the  new thread in the buffer pointed to by thread
-// ID used to refer to the thread in subsequent calls to other pthreads functions
-
-void	launcher(t_data *d)
+int	create_philo(t_main *d)
 {
 	int	i;
 
-	d->first_timestamp = timestamp();
+	d->eat_count = 0;
+	d->philos = malloc(sizeof(t_philo) * d->nbr_philo);
+	d->forks = malloc(sizeof(pthread_mutex_t) * d->nbr_philo);
+	pthread_mutex_init(&d->m_print, NULL);
 	i = -1;
-	while (++i < d->nb_phs)
-	{
-		if (pthread_create(&(d->phs[i].thread_id), NULL, ph_thread, &(d->phs[i])))
-			exit_("Threads creating");
-		d->phs[i].t_last_meal = timestamp();
-	}
-	sleep_as_lons_as_everyone_is_alive(d);
-	i = -1;
-	while (++i < d->nb_phs)
-		pthread_join(d->phs[i].thread_id, NULL);
-	i = -1;
-	while (++i < d->nb_phs)
-		pthread_mutex_destroy(&(d->forks[i]));
-	pthread_mutex_destroy(&(d->writing));
+	while (++i < d->nbr_philo)
+		pthread_mutex_init(&d->forks[i], NULL);
+	pthread_mutex_init(&d->m_good, NULL);
+	pthread_mutex_init(&d->m_eat_count, NULL);
+	d->time = get_time();
+	start_half(d, 0);
+	ft_usleep(d, 10);
+	start_half(d, 1);
+	pthread_create(&d->monitor, NULL, monitor, d);
+	pthread_join(d->monitor, NULL);
+	ft_clear(d);
+	return (0);
 }
 
-int		main(int argc, char **argv)
+int	check_inputs(t_main *d)
 {
-	t_data	d;
+	if (!(d->nbr_philo > 0))
+		return (1);
+	if (!(d->timeToEat > 0))
+		return (1);
+	if (!(d->timeToSleep > 0))
+		return (1);
+	if (!(d->timeToDie > 0))
+		return (1);
+	if (!(d->nbrEat > 0) && d->nbrEat != -1)
+		return (1);
+	return (0);
+}
 
-	if (argc < 5 || argc > 6) 
-		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many > 0])");
-	d.nb_phs = ft_atoi(argv[1]);
-	d.t_death = ft_atoi(argv[2]);
-	d.t_eat = ft_atoi(argv[3]);
-	d.t_sleep = ft_atoi(argv[4]);
-	d.nb_meals_max = -1;
+int	main(int argc, char const *argv[])
+{
+	t_main	d;
+
+	if (argc <= 4 || argc >= 6)
+	{
+		write(STDERR_FILENO, "Error inputs\n", ft_strlen("Error inputs\n"));
+		return (1);
+	}
+	d.nbr_philo = ft_atoi(argv[1]);
+	d.timeToDie = ft_atoi(argv[2]);
+	d.timeToEat = ft_atoi(argv[3]);
+	d.timeToSleep = ft_atoi(argv[4]);
+	d.nbrEat = -1;
 	if (argc == 6)
-		d.nb_meals_max = ft_atoi(argv[5]);
-	if (d.nb_phs < 1 || d.nb_phs > 200 || d.t_death < 0 || d.t_eat < 0 || d.t_sleep < 0 || (argv[5] != NULL && d.nb_meals_max <= 0)) /// 2
-		exit_("arg (0 < nb_philo < 200, die > 0, eat > 0, sleep > 0, [how_many > 0])");
-	d.everybody_has_got_nb_meals_max = 0;
-	d.evrybody_is_alive = 1;
-	if (pthread_mutex_init(&(d.writing), NULL))
-		exit_("Intializing mutex");
-	if (pthread_mutex_init(&(d.check_if_should_stop), NULL))
-		exit_("Intializing mutex");
-	init_phs(&d);
-	launcher(&d);
+		d.nbrEat = ft_atoi(argv[5]);
+	if (check_inputs(&d))
+	{
+		write(STDERR_FILENO, "Error inputs\n", ft_strlen("Error inputs\n"));
+		return (1);
+	}
+	d.good = 1;
+	create_philo(&d);
 	return (0);
 }

@@ -1,23 +1,33 @@
-SRCS = main.c utils.c 
-OBJS = $(addprefix ./.build/, $(SRCS))
-OBJS := $(OBJS:%.c=%.o)
+SRC_NAME =	main.c utils.c utils2.c philo_action.c monitor.c
+SRC = $(addprefix ./src/,$(SRC_NAME))
+OBJ = $(SRC_NAME:.c=.o)
+OBJ := $(addprefix ./objs/, $(OBJ))
+CC = clang -pthread -Wall -Wextra -Werror
 
+all: philo
 
-all	: philo
+philo : $(OBJ)
+	@$(CC) $(OBJ) -o philo
 
-philo : ${OBJS}
-	cc $(OBJS) -o philo -pthread -Wall -Werror -Wextra
+./objs/%.o: ./src/%.c
+	@mkdir ./objs/ 2> /dev/null || true
+	@$(CC) -o $@ -c $<
 
-./.build/%.o : ./src/%.c
-	mkdir -p ./.build
-	cc -c $< -o $@ -I ./src -Wall -Werror -Wextra
+clean:
+	@rm -f $(OBJ)
+	@rmdir ./objs/ 2> /dev/null || true
 
-clean :
-	rm -rf ${OBJS}
+fclean: clean
+	@rm -f philo
 
-fclean : clean
-	rm -f philo
+re: fclean all
 
-re : fclean all
+git:
+	@git add *
+	@git commit -m "philo"
+	@git push
 
-.PHONY : all clean fclean re
+norme:
+	norminette $(SRC)
+
+.PHONY: all, clean, fclean, re, debug

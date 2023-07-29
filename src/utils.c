@@ -1,84 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nsimon <nsimon@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/17 10:21:04 by nsimon            #+#    #+#             */
+/*   Updated: 2021/08/03 00:58:15 by nsimon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-static int	ft_isdigit(int c)
+int	ft_strlen(const char *str)
 {
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
+	int	i;
 
-static int	is_whitespace(char c)
-{
-	if (c == ' ')
-		return (1);
-	if (c == '\f')
-		return (1);
-	if (c == '\n')
-		return (1);
-	if (c == '\r')
-		return (1);
-	if (c == '\t')
-		return (1);
-	if (c == '\v')
-		return (1);
-	return (0);
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
 
 int	ft_atoi(const char *str)
 {
-	size_t	i;
-	int		sign;
-	int		to_return;
+	int	res;
+	int	i;
 
+	res = 0;
 	i = 0;
-	while (is_whitespace(str[i]) == 1)
-		i++;
-	sign = 1;
-	if (str[i] == '-')
+	if (!str)
+		return (res);
+	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
 	{
-		if (!ft_isdigit(str[i + 1]))
-			return (0);
-		sign = -1;
+		res = res * 10 + (str[i] - '0');
 		i++;
 	}
-	if (str[i] == '+')
+	return (res);
+}
+
+void	ft_putnbr_fd(int n, int fd)
+{
+	int		i;
+	char	tmp[12];
+
+	i = 0;
+	while (n != 0)
+	{
+		tmp[i] = n % 10;
+		if (tmp[i] < 0)
+			tmp[i] = -tmp[i] + '0';
+		else
+			tmp[i] += '0';
 		i++;
-	while (str[i] == '0')
-		i++;
-	to_return = 0;
-	while (ft_isdigit(str[i]) == 1)
-		to_return = to_return * 10 + str[i++] - '0';
-	return (sign * to_return);
+		if (n / 10 == 0 && n < 0)
+			tmp[i++] = '-';
+		n /= 10;
+	}
+	if (i == 0)
+		tmp[i++] = '0';
+	tmp[i] = '\0';
+	while (i != 0)
+		write(fd, &tmp[--i], 1);
 }
 
-long long	timestamp(void)
+long long	get_time(void)
 {
-	struct timeval	t;
+	static struct timeval	time;
 
-	gettimeofday(&t, NULL);
-	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	sleep_(long long time, t_data *d)
+void	ft_usleep(t_main *status, int stop_ms)
 {
-	long long t_start_sleep;
+	long long	end_ms;
 
-	t_start_sleep = timestamp();
-	while (d->evrybody_is_alive && timestamp() - t_start_sleep < time)
-		usleep(50);
-}
-
-void	print_action(t_data *d, int id, char *str)
-{
-	pthread_mutex_lock(&(d->writing));
-	if (d->evrybody_is_alive)
-		printf("%lli %i %s\n", timestamp() - d->first_timestamp, id + 1, str);
-	pthread_mutex_unlock(&(d->writing));
-	return ;
-}
-
-void	exit_(char *str)
-{
-	printf("Error : %s\n", str);
-	exit (0);
+	end_ms = get_time() + stop_ms;
+	while (get_time() < end_ms)
+	{
+		pthread_mutex_lock(&status->m_good);
+		if (status->good != 1)
+		{
+			pthread_mutex_unlock(&status->m_good);
+			return ;
+		}
+		pthread_mutex_unlock(&status->m_good);
+		usleep(100);
+	}
 }
