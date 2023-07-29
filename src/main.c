@@ -4,30 +4,20 @@
 
 int	everyone_is_healthy(t_data *d)
 {
-	pthread_mutex_lock(&d->i_take_dairy_of_health);
 	if (d->everyone_is_healthy == 0)
-	{
-		pthread_mutex_unlock(&d->i_take_dairy_of_health);
 		return (0);
-	}
-	pthread_mutex_unlock(&d->i_take_dairy_of_health);
 	return (1);
 }
 
-void	sleep_as_long_as_everyone_is_healthy(t_data *d, int stop_ms)
+void	sleep_as_long_as_everyone_is_healthy(t_data *d, int length)
 {
-	long long	end_ms;
+	long long	t_end;
 
-	end_ms = get_time() + stop_ms;
-	while (get_time() < end_ms)
+	t_end = get_time() + length;
+	while (get_time() < t_end)
 	{
-		pthread_mutex_lock(&d->i_take_dairy_of_health);
-		if (d->everyone_is_healthy == 0)
-		{
-			pthread_mutex_unlock(&d->i_take_dairy_of_health);
+		if (everyone_is_healthy(d) == 0)
 			return ;
-		}
-		pthread_mutex_unlock(&d->i_take_dairy_of_health);
 		usleep(100);
 	}
 }
@@ -88,7 +78,7 @@ void init1(int argc, char const *argv[], t_data *d)
 	d->everyone_is_healthy = 1;
 	// d->eat_count = 0;
 	pthread_mutex_init(&d->i_take_printer, NULL);
-	pthread_mutex_init(&d->i_take_dairy_of_health, NULL);
+	// pthread_mutex_init(&d->i_take_dairy_of_health, NULL);
 	// pthread_mutex_init(&d->m_eat_count, NULL);
 	i = -1;
 	while (++i < d->nbr_philo)
@@ -120,18 +110,14 @@ int	main(int argc, char const *argv[])
 		// pthread_mutex_lock(&d.m_eat_count);
 		// if (d.eat_count >= d.nbr_philo * d.nbr_meals_max && d.nbr_meals_max != -1)
 		// {
-		// 	pthread_mutex_lock(&d.i_take_dairy_of_health);
 		// 	d.everyone_is_healthy = 0;
-		// 	pthread_mutex_unlock(&d.i_take_dairy_of_health);
 		// 	pthread_mutex_unlock(&d.m_eat_count);
 		// 	break ;
 		// }
 		// pthread_mutex_unlock(&d.m_eat_count);
 		if (get_time() > d.philos[i].t_next_meal)
 		{
-			pthread_mutex_lock(&d.i_take_dairy_of_health);
 			d.everyone_is_healthy = 0;
-			pthread_mutex_unlock(&d.i_take_dairy_of_health);
 			pthread_mutex_lock(&d.i_take_printer);
 			printf("%lld %d died\n", get_time() - d.t_start, i + 1);
 			pthread_mutex_unlock(&d.i_take_printer);
