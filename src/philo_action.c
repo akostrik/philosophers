@@ -11,15 +11,6 @@ void	print_message(t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->d->m_print);
 }
 
-void	find_forks(t_data *d, int id)
-{
-	d->philos[id].l_fork = &d->forks[id];
-	if (id + 1 >= d->nbr_philo)
-		d->philos[id].r_fork = &d->forks[0];
-	else
-		d->philos[id].r_fork = &d->forks[id + 1];
-}
-
 void	start_half(t_data *d, int i)
 {
 	while (i < d->nbr_philo)
@@ -29,9 +20,9 @@ void	start_half(t_data *d, int i)
 		d->philos[i].last_eat = d->time;
 		d->philos[i].limit_eat = d->time + d->t_die;
 		d->philos[i].nbr_eat = 0;
-		find_forks(d, i);
-		pthread_create(&d->philos[i].thread, NULL, philosopher,
-			&d->philos[i]);
+		d->philos[i].l_fork = &d->forks[i];
+		d->philos[i].r_fork = &d->forks[(i + 1) % d->nbr_philo];
+		pthread_create(&d->philos[i].thread, NULL, philosopher, &d->philos[i]);
 		i += 2;
 	}
 }
