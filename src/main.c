@@ -18,7 +18,7 @@ void	*philosopher(void *arg)
 		if (check_good(philo->d))
 			return (NULL);
 		print_message(philo, "is sleeping");
-		ft_usleep(philo->d, philo->d->timeToSleep);
+		ft_usleep(philo->d, philo->d->t_sleep);
 		if (check_good(philo->d))
 			return (NULL);
 		print_message(philo, "is thinking");
@@ -61,11 +61,11 @@ int	check_inputs(t_data *d)
 {
 	if (!(d->nbr_philo > 0))
 		return (1);
-	if (!(d->timeToEat > 0))
+	if (!(d->t_eat > 0))
 		return (1);
-	if (!(d->timeToSleep > 0))
+	if (!(d->t_sleep > 0))
 		return (1);
-	if (!(d->timeToDie > 0))
+	if (!(d->t_die > 0))
 		return (1);
 	if (!(d->nbrEat > 0) && d->nbrEat != -1)
 		return (1);
@@ -82,9 +82,9 @@ int	main(int argc, char const *argv[])
 		return (1);
 	}
 	d.nbr_philo = ft_atoi(argv[1]);
-	d.timeToDie = ft_atoi(argv[2]);
-	d.timeToEat = ft_atoi(argv[3]);
-	d.timeToSleep = ft_atoi(argv[4]);
+	d.t_die = ft_atoi(argv[2]);
+	d.t_eat = ft_atoi(argv[3]);
+	d.t_sleep = ft_atoi(argv[4]);
 	d.nbrEat = -1;
 	if (argc == 6)
 		d.nbrEat = ft_atoi(argv[5]);
