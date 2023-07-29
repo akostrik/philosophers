@@ -31,7 +31,6 @@ typedef struct s_data
 	int				everyone_is_healthy;
 	pthread_mutex_t	i_take_fork[200];
 	pthread_mutex_t	i_take_printer;
-
 	// int				eat_count;
 	// pthread_mutex_t	m_eat_count;
 	int				nbr_meals_max; //
