@@ -57,5 +57,6 @@ void		ft_putnbr_fd(int n, int fd);
 void		print_message(t_philo *philo, char *str);
 void		philo_eat(t_philo *philo);
 void		*monitor(void *arg);
+void		exit_(char *str);
 
 #endif

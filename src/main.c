@@ -57,30 +57,12 @@ int	create_philo(t_data *d)
 	return (0);
 }
 
-int	check_inputs(t_data *d)
-{
-	if (!(d->nbr_philo > 0))
-		return (1);
-	if (!(d->t_eat > 0))
-		return (1);
-	if (!(d->t_sleep > 0))
-		return (1);
-	if (!(d->t_die > 0))
-		return (1);
-	if (!(d->nbrEat > 0) && d->nbrEat != -1)
-		return (1);
-	return (0);
-}
-
 int	main(int argc, char const *argv[])
 {
 	t_data	d;
 
 	if (argc <= 4 || argc >= 6)
-	{
-		write(STDERR_FILENO, "Error inputs\n", ft_strlen("Error inputs\n"));
-		return (1);
-	}
+		exit_("Error inputs");
 	d.nbr_philo = ft_atoi(argv[1]);
 	d.t_die = ft_atoi(argv[2]);
 	d.t_eat = ft_atoi(argv[3]);
@@ -88,11 +70,8 @@ int	main(int argc, char const *argv[])
 	d.nbrEat = -1;
 	if (argc == 6)
 		d.nbrEat = ft_atoi(argv[5]);
-	if (check_inputs(&d))
-	{
-		write(STDERR_FILENO, "Error inputs\n", ft_strlen("Error inputs\n"));
-		return (1);
-	}
+	if (d.nbr_philo <= 0 || d.t_eat <= 0 || d.t_sleep <= 0 || d.t_die <= 0 || (argc == 6 && d.nbrEat != -1))
+		exit_("Error inputs");
 	d.good = 1;
 	create_philo(&d);
 	return (0);
