@@ -28,14 +28,12 @@ typedef struct s_data
 	int				t_slp;
 	int				nbrEat;
 	t_philo			philos[200];
-	pthread_mutex_t	i_take_fork[200];
 	long long		t_start;
-	pthread_t		monitor;
 	int				eat_count;
-	pthread_mutex_t	m_eat_count;
 	int				good;
+	pthread_mutex_t	i_take_fork[200];
 	pthread_mutex_t	m_good;
-	pthread_mutex_t	m_dead;
+	pthread_mutex_t	m_eat_count;
 	pthread_mutex_t	i_take_printer;
 }	t_data;
 
