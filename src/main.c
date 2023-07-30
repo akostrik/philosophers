@@ -101,7 +101,7 @@ int	main(int argc, char const *argv[])
 		pthread_create(&d.philos[i].thread, NULL, thread_philo, &d.philos[i]);
 		usleep(20);
 	}
-	i = -1;
+	i = 0;
 	while (1)
 	{
 		// pthread_mutex_lock(&d.m_eat_count);
@@ -115,9 +115,10 @@ int	main(int argc, char const *argv[])
 		if (get_time() > d.philos[i].t_next_meal)
 		{
 			set_everyone_is_healthy(&d, 0);
-			pthread_mutex_lock(&d.i_take_printer);
-			printf("%5lld %d died\n", get_time() - d.t_start, i + 1);
-			pthread_mutex_unlock(&d.i_take_printer);
+			// pthread_mutex_lock(&d.i_take_printer);
+			// printf("%5lld %d died\n", get_time() - d.t_start, i + 1);
+			// pthread_mutex_unlock(&d.i_take_printer);
+			print_message(&d.philos[i], "died");
 			break ;
 		}
 		i = (i + 1) % d.nbr_philo;
