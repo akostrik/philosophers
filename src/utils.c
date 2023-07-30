@@ -52,10 +52,8 @@ void	ft_putnbr_fd(int n, int fd)
 		write(fd, &tmp[--i], 1);
 }
 
-long long	get_time(void)
+void	exit_(char *str)
 {
-	static struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	printf("Error : %s\n", str);
+	exit (0);
 }
