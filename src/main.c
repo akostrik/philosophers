@@ -73,9 +73,10 @@ void init1(int argc, char const *argv[], t_data *d)
 	// 	d->nbr_meals_max = ft_atoi(argv[5]);
 	// if (d->nbr_philo <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nbr_meals_max != -1))
 	// 	exit_("Error inputs");
-	set_everyone_is_healthy(d, 1);
 	// d->eat_count = 0;
 	pthread_mutex_init(&d->i_take_printer, NULL);
+	pthread_mutex_init(&d->i_take_health_journal, NULL);
+	set_everyone_is_healthy(d, 1);
 	// pthread_mutex_init(&d->m_eat_count, NULL);
 	i = -1;
 	while (++i < d->nbr_philo)
@@ -128,5 +129,6 @@ int	main(int argc, char const *argv[])
 	while (++i < d.nbr_philo)
 		pthread_mutex_destroy(&d.i_take_fork[i]);
 	pthread_mutex_destroy(&d.i_take_printer);
+	pthread_mutex_destroy(&d.i_take_health_journal);
 	return (0);
 }
