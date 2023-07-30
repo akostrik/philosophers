@@ -63,6 +63,6 @@ void	print_message(t_philo *ph, char *s)
 	pthread_mutex_lock(&ph->d->get_printer);
 	if ((get_health(ph->d) == 1 && nb_meals_max_is_reached(ph->d) == 0) \
 		|| s[0] == 'd')
-		printf("%5lld %d %s\n", get_time() - ph->d->t_start, ph->id + 1, s);
+		printf("%5lld %3d %s\n", get_time() - ph->d->t_start, ph->id + 1, s);
 	pthread_mutex_unlock(&ph->d->get_printer);
 }
