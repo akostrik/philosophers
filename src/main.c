@@ -36,11 +36,15 @@ void	init(int argc, char const *argv[], t_data *d)
 	d->t_die = ft_atoi(argv[2]);
 	d->t_eat = ft_atoi(argv[3]);
 	d->t_slp = ft_atoi(argv[4]);
+	if (d->nb_phs <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0)
+		exit_("Error args");
 	d->nb_meals_max = -1;
 	if (argc == 6)
+	{
 		d->nb_meals_max = ft_atoi(argv[5]);
-	if (d->nb_phs <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0 || (argc == 6 && d->nb_meals_max == -1))
-		exit_("Error args 2");
+		if (d->nb_meals_max == -1)
+			exit_("Error args 2");
+	}
 	pthread_mutex_init(&d->get_printer, NULL);
 	pthread_mutex_init(&d->get_health_journal, NULL);
 	pthread_mutex_init(&d->get_count_journal, NULL);
