@@ -21,8 +21,8 @@ void	*thread_philo(void *philo0)
 		pthread_mutex_lock(&(philo->d->i_take_fork[(philo->id + 1) % philo->d->nbr_philo]));
 		print_message(philo, "has taken a fork");
 		print_message(philo, "is eating");
-		philo->t_last_meal = get_time();
-		philo->t_next_meal = philo->t_last_meal + philo->d->t_die;
+		// philo->t_last_meal = get_time();
+		philo->t_next_meal = get_time() + philo->d->t_die;
 		usleep(1000 * philo->d->t_eat);
 		pthread_mutex_unlock(&(philo->d->i_take_fork[(philo->id + 1) % philo->d->nbr_philo]));
 		pthread_mutex_unlock(&(philo->d->i_take_fork[philo->id]));
@@ -77,7 +77,7 @@ int	main(int argc, char const *argv[])
 	{
 		d.philos[i].d = &d;
 		d.philos[i].id = i;
-		d.philos[i].t_last_meal = d.t_start;
+		// d.philos[i].t_last_meal = d.t_start;
 		d.philos[i].t_next_meal = d.t_start + d.t_die;
 		// d.philos[i].nbr_meals = 0;
 		pthread_create(&d.philos[i].thread, NULL, thread_philo, &d.philos[i]);
