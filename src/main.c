@@ -1,3 +1,12 @@
+// pthread_join приостанавливает выполнение вызывающего пока не завершится thread
+
+// pthread_detach уведомляет реализацию, что область памяти для thread 
+// может быть восстановлена, когда он завершит выполнение
+// Если thread не завершается, pthread_detach () не служит причиной для его завершения
+
+// процессы имеют отдельные адресные пространства
+// потоки выполнения совместно используют их адресное пространство ?
+
 #include "philo.h"
 
 void	*thread_philo(void *ph0)
@@ -9,6 +18,11 @@ void	*thread_philo(void *ph0)
 	{
 		pthread_mutex_lock(&(ph->d->get_fork[ph->id]));
 		print_message(ph, "has taken a fork");
+		if (ph->d->nb_phs == 1)
+			{
+				pthread_mutex_unlock(&(ph->d->get_fork[ph->id]));
+				return (NULL);
+			}
 		pthread_mutex_lock(&(ph->d->get_fork[(ph->id + 1) % ph->d->nb_phs]));
 		print_message(ph, "has taken a fork");
 		print_message(ph, "is eating");
