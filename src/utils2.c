@@ -29,6 +29,6 @@ void	print_message(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->d->i_take_printer);
 	if (get_everyone_is_healthy(philo->d) == 1)
-		printf("%lld %d %s\n", get_time() - philo->d->t_start, philo->id + 1, str);
+		printf("%5lld %d %s\n", get_time() - philo->d->t_start, philo->id + 1, str);
 	pthread_mutex_unlock(&philo->d->i_take_printer);
 }

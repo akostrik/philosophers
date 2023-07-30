@@ -1,18 +1,18 @@
 // 5  800 200 200 7
 
 #include "philo.h"
-void	sleep_but_wake_up_if_smb_is_dead(t_data *d, int t_length)
-{
-	long long	t_end;
+// void	sleep_but_wake_up_if_smb_is_dead(t_data *d, int t_length)
+// {
+// 	long long	t_end;
 
-	t_end = get_time() + t_length;
-	while (get_time() < t_end)
-	{
-		if (get_everyone_is_healthy(d) == 0)
-			return ;
-		usleep(100);
-	}
-}
+// 	t_end = get_time() + t_length;
+// 	while (get_time() < t_end)
+// 	{
+// 		if (get_everyone_is_healthy(d) == 0)
+// 			return ;
+// 		usleep(100);
+// 	}
+// }
 
 void	*thread_philo(void *philo0)
 {
@@ -37,7 +37,7 @@ void	*thread_philo(void *philo0)
 		print_message(philo, "is eating");
 		philo->t_last_meal = get_time();
 		philo->t_next_meal = philo->t_last_meal + philo->d->t_die;
-		usleep(philo->d->t_eat); ///
+		usleep(1000 * philo->d->t_eat); ///
 		pthread_mutex_unlock(&(philo->d->i_take_fork[(philo->id + 1) % philo->d->nbr_philo]));
 		pthread_mutex_unlock(&(philo->d->i_take_fork[philo->id]));
 		// if (philo->d->nbr_meals_max != -1)
@@ -50,8 +50,8 @@ void	*thread_philo(void *philo0)
 		if (get_everyone_is_healthy(philo->d) == 0)
 			return (NULL);
 		print_message(philo, "is sleeping");
-		sleep_but_wake_up_if_smb_is_dead(philo->d, philo->d->t_slp);
-		// usleep(philo->d->t_slp);
+		// sleep_but_wake_up_if_smb_is_dead(philo->d, philo->d->t_slp);
+		usleep(1000 * philo->d->t_slp);
 		if (get_everyone_is_healthy(philo->d) == 0)
 			return (NULL);
 		print_message(philo, "is thinking");
