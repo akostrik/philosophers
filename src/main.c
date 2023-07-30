@@ -1,27 +1,27 @@
 #include "philo.h"
 
-void	*thread_philo(void *philo0)
+void	*thread_philo(void *ph0)
 {
-	t_philo	*philo;
+	t_philo	*ph;
 
-	philo = (t_philo *)philo0;
-	while (get_everyone_is_healthy(philo->d) == 1 && nbr_meals_max_is_reached(philo->d) == 0)
+	ph = (t_philo *)ph0;
+	while (get_everyone_is_healthy(ph->d) == 1 && nbr_meals_max_is_reached(ph->d) == 0)
 	{
-		pthread_mutex_lock(&(philo->d->i_take_fork[philo->id]));
-		print_message(philo, "has taken a fork");
-		pthread_mutex_lock(&(philo->d->i_take_fork[(philo->id + 1) % philo->d->nbr_philo]));
-		print_message(philo, "has taken a fork");
-		print_message(philo, "is eating");
-		philo->t_next_meal = get_time() + philo->d->t_die;
-		usleep(1000 * philo->d->t_eat);
-		pthread_mutex_unlock(&(philo->d->i_take_fork[(philo->id + 1) % philo->d->nbr_philo]));
-		pthread_mutex_unlock(&(philo->d->i_take_fork[philo->id]));
-		pthread_mutex_lock(&(philo->d->i_take_count_journal));
-		(philo->nbr_meals)++;
-		pthread_mutex_unlock(&(philo->d->i_take_count_journal));
-		print_message(philo, "is sleeping");
-		usleep(1000 * philo->d->t_slp);
-		print_message(philo, "is thinking");
+		pthread_mutex_lock(&(ph->d->i_take_fork[ph->id]));
+		print_message(ph, "has taken a fork");
+		pthread_mutex_lock(&(ph->d->i_take_fork[(ph->id + 1) % ph->d->nbr_philo]));
+		print_message(ph, "has taken a fork");
+		print_message(ph, "is eating");
+		ph->t_next_meal = get_time() + ph->d->t_die;
+		usleep(1000 * ph->d->t_eat);
+		pthread_mutex_unlock(&(ph->d->i_take_fork[(ph->id + 1) % ph->d->nbr_philo]));
+		pthread_mutex_unlock(&(ph->d->i_take_fork[ph->id]));
+		pthread_mutex_lock(&(ph->d->i_take_count_journal));
+		(ph->nbr_meals)++;
+		pthread_mutex_unlock(&(ph->d->i_take_count_journal));
+		print_message(ph, "is sleeping");
+		usleep(1000 * ph->d->t_slp);
+		print_message(ph, "is thinking");
 	}
 	return (NULL);
 }
