@@ -19,7 +19,7 @@ int nb_meals_max_is_reached(t_data *d)
 	to_return = 1;
 	pthread_mutex_lock(&d->get_count_journal);
 	while (++i < d->nb_phs)
-		if (d->philos[i].nb_meals < d->nb_meals_max)
+		if (d->phs[i].nb_meals < d->nb_meals_max)
 		{
 			to_return = 0;
 			break ;

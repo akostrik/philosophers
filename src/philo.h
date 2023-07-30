@@ -26,7 +26,7 @@ typedef struct s_data
 	int				nb_meals_max;
 	int				health;
 	long long		t_start;
-	t_philo			philos[200];
+	t_philo			phs[200];
 	pthread_mutex_t	get_fork[200];
 	pthread_mutex_t	get_printer;
 	pthread_mutex_t	get_health_journal;

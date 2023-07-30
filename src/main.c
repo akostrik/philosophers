@@ -58,11 +58,11 @@ void	start_threads(t_data *d)
 	i = -1;
 	while (++i < d->nb_phs)
 	{
-		d->philos[i].d = d;
-		d->philos[i].id = i;
-		d->philos[i].t_next_meal = d->t_start + d->t_die;
-		d->philos[i].nb_meals = 0;
-		pthread_create(&d->philos[i].thread, NULL, thread_philo, &d->philos[i]);
+		d->phs[i].d = d;
+		d->phs[i].id = i;
+		d->phs[i].t_next_meal = d->t_start + d->t_die;
+		d->phs[i].nb_meals = 0;
+		pthread_create(&d->phs[i].thread, NULL, thread_philo, &d->phs[i]);
 		usleep(20);
 	}
 }
@@ -89,10 +89,10 @@ int	main(int argc, char const *argv[])
 	i = 0;
 	while (1)
 	{
-		if (get_time() > d.philos[i].t_next_meal)
+		if (get_time() > d.phs[i].t_next_meal)
 		{
 			set_health(&d, 0);
-			print_message(&d.philos[i], "died");
+			print_message(&d.phs[i], "died");
 			break ;
 		}
 		if (nb_meals_max_is_reached(&d) == 1)
@@ -101,7 +101,7 @@ int	main(int argc, char const *argv[])
 	}
 	i = -1;
 	while (++i < d.nb_phs)
-		pthread_join(d.philos[i].thread, NULL);
+		pthread_join(d.phs[i].thread, NULL);
 	free_(&d);
 	return (0);
 }
