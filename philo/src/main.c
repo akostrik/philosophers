@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akostrik <akostrik@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/24 11:56:54 by akostrik          #+#    #+#             */
+/*   Updated: 2023/07/23 16:14:01 by akostrik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // pthread_join приостанавливает выполнение вызывающего до завершения thread
 
 // pthread_detach уведомляет реализацию, что область памяти для thread
@@ -7,7 +19,7 @@
 // процессы имеют отдельные адресные пространства
 // потоки совместно используют их адресное пространство ??
 
-// Valgrind ralentit l'exécution de ton programme en ajoutant des instructions 
+// Valgrind ralentit l'exécution de ton programme en ajoutant des instructions
 // supplémentaires à chaque accès dans la mémoire (dans le cas de memcheck)
 // <https://valgrind.org/docs/manual/manual-core.html#manual-core.whatdoes>
 // flag de compilation -fsanitize=thread pour surveiller les threads
