@@ -65,7 +65,7 @@ static void	init(int argc, char const *argv[], t_data *d)
 	d->t_die = ft_atoi(argv[2]);
 	d->t_eat = ft_atoi(argv[3]);
 	d->t_slp = ft_atoi(argv[4]);
-	if (d->nb_phs <= 0 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0)
+	if (d->nb_phs <= 0 || d->nb_phs > 200 || d->t_eat <= 0 || d->t_slp <= 0 || d->t_die <= 0)
 		exit_("Error args");
 	d->nb_meals_max = -1;
 	if (argc == 6)
